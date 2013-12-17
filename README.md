@@ -1,4 +1,4 @@
-msc
+MSc
 ===
 
 Master Of Science thesis
