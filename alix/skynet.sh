@@ -13,11 +13,11 @@
 #
 
 # Therminator directory
-THERMINATOR_DIRECTORY=th_5.7
+THERMINATOR_DIRECTORY=$dir
 
 # Number of events to generate per job
-# EVNTS_PER_JOB=3750
-EVNTS_PER_JOB=2
+EVNTS_PER_JOB=$events
+# EVNTS_PER_JOB=50
 
 # Executable file
 EXECUTABLE="therm2_events"
@@ -27,17 +27,15 @@ EXECUTABLE="therm2_events"
 SKYNET_DIR=$THERMINATOR_DIRECTORY/skynet
 LOG_DIR=$SKYNET_DIR/log
 JOB_DIR=$SKYNET_DIR/$PBS_JOBID
-EVENT_DIR=$JOB_DIR/events
+EVENT_DIR=$JOB_DIR
 
 
-function prepare_events_ini()
-{
 EVNTS_INI="[FreezeOut]
 FreezeOutModel = Lhyquid3V
 # FreezeOutModelINI =
 
 [Event]
-NumberOfEvents = $EVNT_NR
+NumberOfEvents = $EVNTS_PER_JOB
 EventFileType = root
 
 [Primordial]
@@ -56,15 +54,46 @@ EventDir = ../$EVENT_DIR/
 [Logging]
 LogFile = ../$LOG_DIR/$PBS_JOBID.log
 "
-}
 
 function prepare_workspace()
 {
-  prepare_events_ini
   mkdir -p $EVENT_DIR
   mkdir -p $LOG_DIR
   echo "$EVNTS_INI" >> $JOB_DIR/events.ini  
+
+# copy fmultiplicity_*.txt to job's event directory
+  for dirname in `ls $THERMINATOR_DIRECTORY/events`
+  do
+    mkdir -p $EVENT_DIR/$dirname/
+    cp $THERMINATOR_DIRECTORY/events/$dirname/*.txt $EVENT_DIR/$dirname/
+  done
 }
+
+function show_help() 
+{
+  echo "Przyklad uruchomienia:\r\tqsub -q long -t 0-19 skynet.sh -v dir=th_5.7,events=6000"
+}
+
+if [ -z $dir ]
+then
+  echo "Podaj katalog z Therminatorem uruchomionym przez skynet"
+  show_help
+  exit
+fi
+
+if [ ! -d $dir/events ] && [ ! -d $dir/skynet ]
+then
+  echo "Nieprawidlowy katalog z Therminatorem"
+  show_help
+  exit
+fi
+
+if [ -z $events ]
+then
+  echo "Podaj liczbe eventow to wygenerowania przez kazdy proces"
+  show_help
+  exit
+fi
 
 prepare_workspace
 . /etc/root_v5.sh
