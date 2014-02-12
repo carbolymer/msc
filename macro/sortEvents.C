@@ -2,7 +2,9 @@
 #include <TFile.h>
 #include <TBranch.h>
 #include <TTree.h>
-
+#include <stdio.h>
+#include <libgen.h>
+#include <errno.h>
 
 using namespace std;
 
@@ -44,17 +46,36 @@ b11     CenMin[0] = CenMin[1] = 60
 
 // int sortEvents() {
 int main(int argc, char *argv[]) {
-  if(argc < 1) {
+  Model_t_Lhyquid3V parameters;
+  Float_t CenMin[2];
+
+  bool doNotMove = false;
+  string targetDirectory;
+  string command;
+  string directories[9] = {
+    "/mnt/data2/Models/sorted/2/",
+    "/mnt/data2/Models/sorted/3/",
+    "/mnt/data2/Models/sorted/5/",
+    "/mnt/data2/Models/sorted/5.7/", // new
+    "/mnt/data2/Models/sorted/7/",
+    "/mnt/data2/Models/sorted/8/",
+    "/mnt/data2/Models/sorted/9/",
+    "/mnt/data2/Models/sorted/10/",
+    "/mnt/data2/Models/sorted/11/"
+  };
+
+  if(argc < 2) {
     cout << "Please provide file name." << endl;
     return -1;
   }
-  string fileName = argv[1];
-  cout << "File name: " << fileName << endl;
-  // string fileName = "sample/" + string(argv[1]) +"/event.root";
+  string filePath = argv[1];
+  string dirName = dirname(argv[1]);
+  string fileName = basename((char*)filePath.c_str());
+  // cout << "File name: " << fileName << endl;
+  // string filePath = "sample/" + string(argv[1]) +"/event.root";
 
-  Model_t_Lhyquid3V parameters;
 
-  TFile file(fileName.c_str());
+  TFile file(filePath.c_str());
   if(file.IsZombie()) {
     cout << "Error opening file!!" << endl;
     return -1;
@@ -73,15 +94,42 @@ int main(int argc, char *argv[]) {
   parameters.CentralityMax = 0;
   // parameters.DeviceName = "";
   bParameters->SetAddress(&parameters);
-  for(unsigned short int i = 0; i < bParameters->GetEntries(); ++i) {
-    bParameters ->GetEntry(i);
-    cout << "=== Entry: " << i << " ===" << endl;
-    cout << "CollEn:\t" << parameters.CollidingEnergy << endl;
-    // cout << "CollSys:\t" << parameters.CollidingSystem << endl;
-    cout << "b:\t" << parameters.ImpactParameter << endl;
-    cout << "CenMin:\t" << parameters.CentralityMin << endl;
-    cout << "CenMax:\t" << parameters.CentralityMax << endl;
-    // cout << "DeviceName:\t" << parameters.DeviceName << endl;
+  if(bParameters->GetEntries() != 2) {
+    cout << "Too few entries in parameters tree." << endl;
+    return -1;
   }
+  bParameters ->GetEntry(0);
+  CenMin[0] = parameters.CentralityMin;
+  bParameters ->GetEntry(1);
+  CenMin[1] = parameters.CentralityMin;
   
+  if(CenMin[0] < 1) {
+    doNotMove = true; // b2 & b3
+  } else if(CenMin[0] == 10 && CenMin[1] == 10) {
+    targetDirectory = directories[2]; // b5
+  } else if(CenMin[0] == 10 && CenMin[1] < 1) {
+    targetDirectory = directories[3]; // b5_new
+  } else if(CenMin[0] == 20) {
+    targetDirectory = directories[4]; // b7
+  } else if(CenMin[0] == 30) {
+    targetDirectory = directories[5]; // b8
+  } else if(CenMin[0] == 40) {
+    targetDirectory = directories[6]; // b9
+  } else if(CenMin[0] == 50) {
+    targetDirectory = directories[7]; // b10
+  } else if(CenMin[0] == 60) {
+    targetDirectory = directories[8]; // b11
+  } else {
+    cerr << "!!> " << filePath << "\t" << CenMin[0] << " | " << CenMin[1] << endl;
+  }
+  if(!doNotMove) {
+    cout << filePath << "\t\t-> " << targetDirectory+fileName << endl;
+    if(rename(filePath.c_str(), (targetDirectory + fileName).c_str()) != 0) {
+      cout << "rename failed! errno: " << errno << endl;
+    }
+  } else {
+    cout << "b2 / b3" << endl;
+  }
+
+  return 0;
 }
