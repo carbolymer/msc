@@ -121,14 +121,18 @@ public:
 		if(_alpha != 0)
 		{
 			_coefficients.Draw();
-			if(yMax > 7)
-				_coefficients.DrawLatex(0.4, 9, 
-					(std::string("#splitline{\\alpha = ") + a.str() + pm + aE.str() 
-					+ std::string("}{\\gamma = ") + g.str() + pm + gE.str() + std::string("}")).c_str() );
+			if(yMax > 11)
+				_coefficients.DrawLatex(0.33, 10.8, 
+					(std::string("#splitline{#alpha = ") + a.str() + pm + aE.str() 
+					+ std::string("}{#gamma = ") + g.str() + pm + gE.str() + std::string("}")).c_str() );
+			else if(yMax > 7)
+				_coefficients.DrawLatex(0.33, 8.8, 
+					(std::string("#splitline{#alpha = ") + a.str() + pm + aE.str() 
+					+ std::string("}{#gamma = ") + g.str() + pm + gE.str() + std::string("}")).c_str() );
 			else
-				_coefficients.DrawLatex(0.4, 6, 
-					(std::string("#splitline{\\alpha = ") + a.str() + pm + aE.str() 
-					+ std::string("}{\\gamma = ") + g.str() + pm + gE.str() + std::string("}")).c_str() );
+				_coefficients.DrawLatex(0.33, 6, 
+					(std::string("#splitline{#alpha = ") + a.str() + pm + aE.str() 
+					+ std::string("}{#gamma = ") + g.str() + pm + gE.str() + std::string("}")).c_str() );
 		}
 	}
 

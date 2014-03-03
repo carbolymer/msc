@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <libgen.h>
 #include <TFile.h>
 #include <TH1D.h>
 #include <TH3D.h>

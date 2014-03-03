@@ -9,6 +9,7 @@ Int_t dofix[20];
 
 string plotShName;
 string configShName;
+string pairType;
 
 Double_t parsg[20];
 Double_t parmin[20];
@@ -25,10 +26,15 @@ int main(int argc, char **argv)
       << argv[0] << " outfilekk51a.root 0.12 0.4 kk" << std::endl;
       return 1;
   }
-  std::string pairType(argv[3]);
+  string outputDirectory(argv[4]);
+  string centrality;
+  pairType = argv[4];
+  pairType = basename( (char*) pairType.c_str());
+  outputDirectory = dirname( (char*) outputDirectory.c_str());
+  centrality = basename( (char*) outputDirectory.c_str());
 
   plotShName = string(argv[4]) + string(argv[2]) + string("fitsh.png");
-  configShName = string(argv[4]) + string(argv[2]) + string("fitsh.conf");
+  configShName = string("data/") + string("fitsh.") + centrality + string(".") + pairType + string(".") + string(argv[2]) + string(".conf");
 
   fitshanalyticaaabackshdircovcoulpars(argv[1],
   Rout, Rside, Rlong, Rlcms, lambda,
@@ -43,7 +49,7 @@ int main(int argc, char **argv)
   RsideFile << argv[2] << "\t" << argv[3] << "\t" << Rside << "\t" << dRout << std::endl;
   RlongFile << argv[2] << "\t" << argv[3] << "\t" << Rlong << "\t" << dRout << std::endl;
   RlcmsFile << argv[2] << "\t" << argv[3] << "\t" << Rlcms << "\t" << dRlcms << std::endl;
-  lambdaFile << argv[2] << "\t" << argv[3] << "\t" << lambda << "\t" << lambda << std::endl;
+  lambdaFile << argv[2] << "\t" << argv[3] << "\t" << lambda << "\t" << dlambda << std::endl;
 
   RoutFile.close();
   RsideFile.close();
@@ -1243,11 +1249,16 @@ bool fitshanalyticaaabackshdircovcoulpars(const char *filname,
     *inf = 0, 
     *customfile = 0;
 
+  string defaultConfigFileName = string("data/fitsh.") + pairType + string(".conf");
+
   customfile = new ifstream(configShName.c_str());
-  if(customfile->fail())
-    inf = new ifstream("data/fitsh.conf");
-  else
+  if(customfile->fail()) {
+    cout << "*** Using default config file:   " << defaultConfigFileName << endl;
+    inf = new ifstream(defaultConfigFileName.c_str());
+  } else {
+    cout << "*** Using custom config file:   " << configShName << endl;
     inf = customfile;
+  }
   if(inf->fail())
   {
     cout << "loading parameter file failed" << endl;

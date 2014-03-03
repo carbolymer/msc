@@ -18,9 +18,10 @@ const Double_t particleMasses[3] = { // in GeV / c^2
 	0.938272029 // proton
 };
 
-const int numberOfCentralities = 15;
+const int numberOfCentralities = 8;
 
-void createLcmsPlot(std::string *graphNames, std::string *prefixes, const char *fileName, MultiFitPlot &Rinv, MultiFitPlot &Rlcms);
+void createLcmsPlot(std::string *graphNames, std::string *prefixes, const char *fileName,
+			MultiFitPlot &Rinv, MultiFitPlot &Rlcms, unsigned short int periphericity = 0);
 void createPrfPlotAllInONe(MultiFitPlot Rinv[], MultiFitPlot Rlcms[], int nCentralities);
 void createPrfPlots(MultiFitPlot Rinv[], MultiFitPlot Rlcms[], int nCentralities);
 void fillGraph(std::string fileName, TGraphErrors *graph, unsigned int iParticle, bool isInvariant = kFALSE);
@@ -44,134 +45,142 @@ int plotter()
 	MultiFitPlot Rinv[numberOfCentralities];
 	MultiFitPlot Rlcms[numberOfCentralities];
 
-	prefixes[0] = "b2/kk";
-	prefixes[1] = "b2/pipi";
-	prefixes[2] = "b2/pp";
-	graphNames[0] = "K-K b = 2 fm";
-	graphNames[1] = "\\pi-\\pi b = 2 fm";
-	graphNames[2] = "p-p b = 2 fm";
-	createLcmsPlot(graphNames, prefixes, "b2", Rinv[0], Rlcms[0]);
+	prefixes[0] = "b2.3/kk";
+	prefixes[1] = "b2.3/pipi";
+	prefixes[2] = "b2.3/pp";
+	graphNames[0] = "K-K b = 2.3 fm";
+	graphNames[1] = "#pi-#pi b = 2.3 fm";
+	graphNames[2] = "p-p b = 2.3 fm";
+	createLcmsPlot(graphNames, prefixes, "b2.3", Rinv[0], Rlcms[0]);
 
-	prefixes[0] = "b3/kk";
-	prefixes[1] = "b3/pipi";
-	prefixes[2] = "b3/pp";
-	graphNames[0] = "K-K b = 3 fm";
-	graphNames[1] = "\\pi-\\pi b = 3 fm";
-	graphNames[2] = "p-p b = 3 fm";
-	createLcmsPlot(graphNames, prefixes, "b3", Rinv[1], Rlcms[1]);
+	prefixes[0] = "b3.1/kk";
+	prefixes[1] = "b3.1/pipi";
+	prefixes[2] = "b3.1/pp";
+	graphNames[0] = "K-K b = 3.1 fm";
+	graphNames[1] = "#pi-#pi b = 3.1 fm";
+	graphNames[2] = "p-p b = 3.1 fm";
+	createLcmsPlot(graphNames, prefixes, "b3.1", Rinv[1], Rlcms[1]);
 
-	prefixes[0] = "b5/kk";
-	prefixes[1] = "b5/pipi";
-	prefixes[2] = "b5/pp";
-	graphNames[0] = "K-K b = 5 fm";
-	graphNames[1] = "\\pi-\\pi b = 5 fm";
-	graphNames[2] = "p-p b = 5 fm";
-	createLcmsPlot(graphNames, prefixes, "b5", Rinv[2], Rlcms[2]);
+	prefixes[0] = "b5.7/kk";
+	prefixes[1] = "b5.7/pipi";
+	prefixes[2] = "b5.7/pp";
+	graphNames[0] = "K-K b = 5.7 fm";
+	graphNames[1] = "#pi-#pi b = 5.7 fm";
+	graphNames[2] = "p-p b = 5.7 fm";
+	createLcmsPlot(graphNames, prefixes, "b5.7", Rinv[2], Rlcms[2]);
 
 	// old EPOS results
 	// prefixes[0] = "bb3m6/kk";
 	// prefixes[1] = "bb3m6/pipi";
 	// prefixes[2] = "bb3m6/pp";
 	// graphNames[0] = "K-K EPOS";
-	// graphNames[1] = "\\pi-\\pi EPOS";
+	// graphNames[1] = "#pi-#pi EPOS";
 	// graphNames[2] = "p-p EPOS";
 	// createLcmsPlot(graphNames, prefixes, "bb3m6_EPOS", Rinv[3], Rlcms[3]);
 
-	prefixes[0] = "lhc0005/kk";
-	prefixes[1] = "lhc0005/pipi";
-	prefixes[2] = "lhc0005/pp";
-	graphNames[0] = "K-K 0-5%";
-	graphNames[1] = "\\pi-\\pi 0-5%";
-	graphNames[2] = "p-p 0-5%";
-	createLcmsPlot(graphNames, prefixes, "lhc0005_hHKM", Rinv[3], Rlcms[3]);
+	// prefixes[0] = "lhc0005/kk";
+	// prefixes[1] = "lhc0005/pipi";
+	// prefixes[2] = "lhc0005/pp";
+	// graphNames[0] = "K-K 0-5%";
+	// graphNames[1] = "#pi-#pi 0-5%";
+	// graphNames[2] = "p-p 0-5%";
+	// createLcmsPlot(graphNames, prefixes, "lhc0005_hHKM", Rinv[3], Rlcms[3]);
 
-	prefixes[0] = "lhc1020/kk";
-	prefixes[1] = "lhc1020/pipi";
-	prefixes[2] = "lhc1020/pp";
-	graphNames[0] = "K-K 10-20%";
-	graphNames[1] = "\\pi-\\pi 10-20%";
-	graphNames[2] = "p-p 10-20%";
-	createLcmsPlot(graphNames, prefixes, "lhc1020_hHKM", Rinv[4], Rlcms[4]);
+	// prefixes[0] = "lhc1020/kk";
+	// prefixes[1] = "lhc1020/pipi";
+	// prefixes[2] = "lhc1020/pp";
+	// graphNames[0] = "K-K 10-20%";
+	// graphNames[1] = "#pi-#pi 10-20%";
+	// graphNames[2] = "p-p 10-20%";
+	// createLcmsPlot(graphNames, prefixes, "lhc1020_hHKM", Rinv[4], Rlcms[4]);
 
-	prefixes[0] = "lhc2030/kk";
-	prefixes[1] = "lhc2030/pipi";
-	prefixes[2] = "lhc2030/pp";
-	graphNames[0] = "K-K 20-30%";
-	graphNames[1] = "\\pi-\\pi 20-30%";
-	graphNames[2] = "p-p 20-30%";
-	createLcmsPlot(graphNames, prefixes, "lhc2030_hHKM", Rinv[5], Rlcms[5]);
+	// prefixes[0] = "lhc2030/kk";
+	// prefixes[1] = "lhc2030/pipi";
+	// prefixes[2] = "lhc2030/pp";
+	// graphNames[0] = "K-K 20-30%";
+	// graphNames[1] = "#pi-#pi 20-30%";
+	// graphNames[2] = "p-p 20-30%";
+	// createLcmsPlot(graphNames, prefixes, "lhc2030_hHKM", Rinv[5], Rlcms[5]);
 
-	prefixes[0] = "lhc3040/kk";
-	prefixes[1] = "lhc3040/pipi";
-	prefixes[2] = "lhc3040/pp";
-	graphNames[0] = "K-K 30-40%";
-	graphNames[1] = "\\pi-\\pi 30-40%";
-	graphNames[2] = "p-p 30-40%";
-	createLcmsPlot(graphNames, prefixes, "lhc3040_hHKM", Rinv[6], Rlcms[6]);
+	// prefixes[0] = "lhc3040/kk";
+	// prefixes[1] = "lhc3040/pipi";
+	// prefixes[2] = "lhc3040/pp";
+	// graphNames[0] = "K-K 30-40%";
+	// graphNames[1] = "#pi-#pi 30-40%";
+	// graphNames[2] = "p-p 30-40%";
+	// createLcmsPlot(graphNames, prefixes, "lhc3040_hHKM", Rinv[6], Rlcms[6]);
 
-	prefixes[0] = "epos_0005/kk";
-	prefixes[1] = "epos_0005/pipi";
-	prefixes[2] = "epos_0005/pp";
-	graphNames[0] = "K-K 0-5%";
-	graphNames[1] = "\\pi-\\pi 0-5%";
-	graphNames[2] = "p-p 0-5%";
-	createLcmsPlot(graphNames, prefixes, "epos_0005", Rinv[7], Rlcms[7]);
+	// prefixes[0] = "epos_0005/kk";
+	// prefixes[1] = "epos_0005/pipi";
+	// prefixes[2] = "epos_0005/pp";
+	// graphNames[0] = "K-K 0-5%";
+	// graphNames[1] = "#pi-#pi 0-5%";
+	// graphNames[2] = "p-p 0-5%";
+	// createLcmsPlot(graphNames, prefixes, "epos_0005", Rinv[7], Rlcms[7]);
 
-	prefixes[0] = "epos_1020/kk";
-	prefixes[1] = "epos_1020/pipi";
-	prefixes[2] = "epos_1020/pp";
-	graphNames[0] = "K-K 10-20%";
-	graphNames[1] = "\\pi-\\pi 10-20%";
-	graphNames[2] = "p-p 10-20%";
-	createLcmsPlot(graphNames, prefixes, "epos_1020", Rinv[8], Rlcms[8]);
+	// prefixes[0] = "epos_1020/kk";
+	// prefixes[1] = "epos_1020/pipi";
+	// prefixes[2] = "epos_1020/pp";
+	// graphNames[0] = "K-K 10-20%";
+	// graphNames[1] = "#pi-#pi 10-20%";
+	// graphNames[2] = "p-p 10-20%";
+	// createLcmsPlot(graphNames, prefixes, "epos_1020", Rinv[8], Rlcms[8]);
 
-	prefixes[0] = "epos_2030/kk";
-	prefixes[1] = "epos_2030/pipi";
-	prefixes[2] = "epos_2030/pp";
-	graphNames[0] = "K-K 20-30%";
-	graphNames[1] = "\\pi-\\pi 20-30%";
-	graphNames[2] = "p-p 20-30%";
-	createLcmsPlot(graphNames, prefixes, "epos_2030", Rinv[9], Rlcms[9]);
+	// prefixes[0] = "epos_2030/kk";
+	// prefixes[1] = "epos_2030/pipi";
+	// prefixes[2] = "epos_2030/pp";
+	// graphNames[0] = "K-K 20-30%";
+	// graphNames[1] = "#pi-#pi 20-30%";
+	// graphNames[2] = "p-p 20-30%";
+	// createLcmsPlot(graphNames, prefixes, "epos_2030", Rinv[9], Rlcms[9]);
 
-	prefixes[0] = "epos_3040/kk";
-	prefixes[1] = "epos_3040/pipi";
-	prefixes[2] = "epos_3040/pp";
-	graphNames[0] = "K-K 30-40%";
-	graphNames[1] = "\\pi-\\pi 30-40%";
-	graphNames[2] = "p-p 30-40%";
-	createLcmsPlot(graphNames, prefixes, "epos_3040", Rinv[10], Rlcms[10]);
+	// prefixes[0] = "epos_3040/kk";
+	// prefixes[1] = "epos_3040/pipi";
+	// prefixes[2] = "epos_3040/pp";
+	// graphNames[0] = "K-K 30-40%";
+	// graphNames[1] = "#pi-#pi 30-40%";
+	// graphNames[2] = "p-p 30-40%";
+	// createLcmsPlot(graphNames, prefixes, "epos_3040", Rinv[10], Rlcms[10]);
 
-	prefixes[0] = "lhyquid3vb8.7/kk";
-	prefixes[1] = "lhyquid3vb8.7/pipi";
-	prefixes[2] = "lhyquid3vb8.7/pp";
-	graphNames[0] = "K-K b=8.7fm";
-	graphNames[1] = "\\pi-\\pi b=8.7fm";
-	graphNames[2] = "p-p b=8.7fm";
-	createLcmsPlot(graphNames, prefixes, "lhyquid3vb8", Rinv[11], Rlcms[11]);
+	prefixes[0] = "b7.4/kk";
+	prefixes[1] = "b7.4/pipi";
+	prefixes[2] = "b7.4/pp";
+	graphNames[0] = "K-K b=7.4 fm";
+	graphNames[1] = "#pi-#pi b=7.4 fm";
+	graphNames[2] = "p-p b=7.4 fm";
+	createLcmsPlot(graphNames, prefixes, "b7.4", Rinv[3], Rlcms[3], 1);	
 
-	prefixes[0] = "lhyquid3vb9.9/kk";
-	prefixes[1] = "lhyquid3vb9.9/pipi";
-	prefixes[2] = "lhyquid3vb9.9/pp";
-	graphNames[0] = "K-K b=9.9fm";
-	graphNames[1] = "\\pi-\\pi b=9.9fm";
-	graphNames[2] = "p-p b=9.9fm";
-	createLcmsPlot(graphNames, prefixes, "lhyquid3vb9", Rinv[12], Rlcms[12]);
+	prefixes[0] = "b8.7/kk";
+	prefixes[1] = "b8.7/pipi";
+	prefixes[2] = "b8.7/pp";
+	graphNames[0] = "K-K b=8.7 fm";
+	graphNames[1] = "#pi-#pi b=8.7 fm";
+	graphNames[2] = "p-p b=8.7 fm";
+	createLcmsPlot(graphNames, prefixes, "b8.7", Rinv[4], Rlcms[4], 1);
 
-	prefixes[0] = "lhyquid3vb10.9/kk";
-	prefixes[1] = "lhyquid3vb10.9/pipi";
-	prefixes[2] = "lhyquid3vb10.9/pp";
-	graphNames[0] = "K-K b=10.9fm";
-	graphNames[1] = "\\pi-\\pi b=10.9fm";
-	graphNames[2] = "p-p b=10.9fm";
-	createLcmsPlot(graphNames, prefixes, "lhyquid3vb10", Rinv[13], Rlcms[13]);
+	prefixes[0] = "b9.9/kk";
+	prefixes[1] = "b9.9/pipi";
+	prefixes[2] = "b9.9/pp";
+	graphNames[0] = "K-K b=9.9 fm";
+	graphNames[1] = "#pi-#pi b=9.9 fm";
+	graphNames[2] = "p-p b=9.9 fm";
+	createLcmsPlot(graphNames, prefixes, "b9.9", Rinv[5], Rlcms[5], 1);
 
-	prefixes[0] = "lhyquid3vb11.9/kk";
-	prefixes[1] = "lhyquid3vb11.9/pipi";
-	prefixes[2] = "lhyquid3vb11.9/pp";
-	graphNames[0] = "K-K b=11.9fm";
-	graphNames[1] = "\\pi-\\pi b=11.9fm";
-	graphNames[2] = "p-p b=11.9fm";
-	createLcmsPlot(graphNames, prefixes, "lhyquid3vb11", Rinv[14], Rlcms[14]);
+	prefixes[0] = "b10.9/kk";
+	prefixes[1] = "b10.9/pipi";
+	prefixes[2] = "b10.9/pp";
+	graphNames[0] = "K-K b=10.9 fm";
+	graphNames[1] = "#pi-#pi b=10.9 fm";
+	graphNames[2] = "p-p b=10.9 fm";
+	createLcmsPlot(graphNames, prefixes, "b10.9", Rinv[6], Rlcms[6], 2);
+
+	prefixes[0] = "b11.9/kk";
+	prefixes[1] = "b11.9/pipi";
+	prefixes[2] = "b11.9/pp";
+	graphNames[0] = "K-K b=11.9 fm";
+	graphNames[1] = "#pi-#pi b=11.9 fm";
+	graphNames[2] = "p-p b=11.9 fm";
+	createLcmsPlot(graphNames, prefixes, "b11.9", Rinv[7], Rlcms[7], 2);
 
 	createPrfPlots(Rinv, Rlcms, numberOfCentralities);
 	return 0;
@@ -212,17 +221,23 @@ void fillGraph(std::string fileName, TGraphErrors *graph, unsigned int iParticle
 	}
 }
 
-void createLcmsPlot(std::string *graphNames, std::string *prefixes, const char *fileName, MultiFitPlot &Rinv, MultiFitPlot &Rlcms)
+void createLcmsPlot(std::string *graphNames, std::string *prefixes, const char *fileName,
+			MultiFitPlot &Rinv, MultiFitPlot &Rlcms, unsigned short int periphericity)
 {
 	TCanvas *canvas = new TCanvas("canvas", "R_LCMS", 900, 800);
 	canvas->Divide(2,2);
 
 	MultiFitPlot Rout(";m_{T} [GeV/c^{2}];R_{out} [fm]");
 
-	if(fileName[2] == 'y') // lhyquid
-	{
-		Rout.yMin = 1.5;
-		Rout.yMax = 7;
+	switch( periphericity ) {
+		case 1:
+			Rout.yMin = 1.5;
+			Rout.yMax = 9.5;
+			break;
+		case 2:
+			Rout.yMin = 1.0;
+			Rout.yMax = 6.5;
+			break;
 	}
 
 	Rout.graphNames[0] = graphNames[0];
@@ -252,7 +267,7 @@ void createLcmsPlot(std::string *graphNames, std::string *prefixes, const char *
 	Rside.labels = ";m_{T} [GeV/c^{2}];R_{side} [fm]";
 	Rlong.labels = ";m_{T} [GeV/c^{2}];R_{long} [fm]";
 	Rlcms.labels = ";m_{T} [GeV/c^{2}];R_{LCMS} [fm]";
-	Rinv.labels = ";m_{T} [GeV/c^{2}];R_{inv}/[(\\sqrt{\\gamma}+2)/3]^{1/2} [fm]";
+	Rinv.labels = ";m_{T} [GeV/c^{2}];R_{inv}/[(#sqrt{#gamma}+2)/3]^{1/2} [fm]";
 
 	for( int j = 0; j < graphCount; ++j)
 	{
@@ -332,9 +347,9 @@ void createPrfPlots(MultiFitPlot *Rinv, MultiFitPlot *Rlcms, int nCentralities)
 {
 	TCanvas *canvas = 0;
 
-	// therminator
-	nCentralities = 3;
-	canvas = new TCanvas("canvas", "R_LCMS", 900, 600);
+	// therminator central
+	nCentralities = 4;
+	canvas = new TCanvas("canvas", "R_LCMS", 1200, 600);
 	canvas->Divide(nCentralities, 2);
 	for(int i = 1; i <= nCentralities; ++i)
 	{
@@ -345,9 +360,9 @@ void createPrfPlots(MultiFitPlot *Rinv, MultiFitPlot *Rlcms, int nCentralities)
 		Rlcms[i-1].labels = ";m_{T} [GeV/c^{2}];R_{LCMS} [fm]";
 		Rlcms[i-1].Draw();
 	}
-	canvas->SaveAs("output/all_therminator.png");
+	canvas->SaveAs("output/therminator_central.png");
 	delete canvas;
-
+/*
 	// hHKM
 	nCentralities = 4;
 	canvas = new TCanvas("canvas", "R_LCMS", 1200, 600);
@@ -378,24 +393,25 @@ void createPrfPlots(MultiFitPlot *Rinv, MultiFitPlot *Rlcms, int nCentralities)
 		Rlcms[i-1+7].Draw();
 	}
 	canvas->SaveAs("output/all_EPOS.png");
-
+*/
+	// therminator peripheral
 	nCentralities = 4;
 	canvas = new TCanvas("canvas", "R_LCMS", 1200, 600);
 	canvas->Divide(nCentralities, 2);
 	for(int i = 1; i <= nCentralities; ++i)
 	{
 		canvas->cd(i);
-		Rinv[i-1+11].yMin = 1.5;
-		Rinv[i-1+11].yMax = 7;
-		Rinv[i-1+11].Draw();
-		Rinv[i-1+11].Fit();
+		Rinv[i-1+4].yMin = 1.5;
+		Rinv[i-1+4].yMax = 7;
+		Rinv[i-1+4].Draw();
+		Rinv[i-1+4].Fit();
 		canvas->cd(i+nCentralities);
-		Rlcms[i-1+11].yMin = 1.5;
-		Rlcms[i-1+11].yMax = 7;
-		Rlcms[i-1+11].labels = ";m_{T} [GeV/c^{2}];R_{LCMS} [fm]";
-		Rlcms[i-1+11].Draw();
+		Rlcms[i-1+4].yMin = 1.5;
+		Rlcms[i-1+4].yMax = 7;
+		Rlcms[i-1+4].labels = ";m_{T} [GeV/c^{2}];R_{LCMS} [fm]";
+		Rlcms[i-1+4].Draw();
 	}
-	canvas->SaveAs("output/all_lhyquid3v.png");
+	canvas->SaveAs("output/therminator_peripheral.png");
 
 	delete canvas;
 
@@ -403,9 +419,10 @@ void createPrfPlots(MultiFitPlot *Rinv, MultiFitPlot *Rlcms, int nCentralities)
 	// normalized
 	gStyle->SetPadGridX(true);
 	gStyle->SetPadGridY(true);
-	// therminator
-	nCentralities = 3;
-	canvas = new TCanvas("canvas", "R_LCMS", 900, 600);
+
+	// therminator central
+	nCentralities = 4;
+	canvas = new TCanvas("canvas", "R_LCMS", 1200, 600);
 	canvas->Divide(nCentralities, 2);
 	for(int i = 1; i <= nCentralities; ++i)
 	{
@@ -416,10 +433,10 @@ void createPrfPlots(MultiFitPlot *Rinv, MultiFitPlot *Rlcms, int nCentralities)
 		Rlcms[i-1].labels = ";m_{T} [GeV/c^{2}];R_{LCMS} / R_{LCMS}^{FIT}";
 		Rlcms[i-1].GetNormalizedPlot().Draw();
 	}
-	canvas->SaveAs("output/all_therminator_div.png");
+	canvas->SaveAs("output/therminator_central_div.png");
 	delete canvas;
 
-
+/*
 	// hHKM
 	nCentralities = 4;
 	canvas = new TCanvas("canvas", "R_LCMS", 1200, 600);
@@ -451,21 +468,22 @@ void createPrfPlots(MultiFitPlot *Rinv, MultiFitPlot *Rlcms, int nCentralities)
 	}
 	canvas->SaveAs("output/all_EPOS_div.png");
 	delete canvas;
+*/
 
-	//lhyquid3v
+	// therminator peripheral
 	nCentralities = 4;
 	canvas = new TCanvas("canvas", "R_LCMS", 1200, 600);
 	canvas->Divide(nCentralities,2);
 	for(int i = 1; i <= nCentralities; ++i)
 	{
 		canvas->cd(i);
-		Rinv[i-1+11].labels = ";m_{T} [GeV/c^{2}];R_{inv}/ R_{inv}^{FIT}";
-		Rinv[i-1+11].GetNormalizedPlot().Draw();
+		Rinv[i-1+4].labels = ";m_{T} [GeV/c^{2}];R_{inv}/ R_{inv}^{FIT}";
+		Rinv[i-1+4].GetNormalizedPlot().Draw();
 		canvas->cd(i+nCentralities);
-		Rlcms[i-1+11].labels = ";m_{T} [GeV/c^{2}];R_{LCMS} / R_{LCMS}^{FIT}";
-		Rlcms[i-1+11].GetNormalizedPlot().Draw();
+		Rlcms[i-1+4].labels = ";m_{T} [GeV/c^{2}];R_{LCMS} / R_{LCMS}^{FIT}";
+		Rlcms[i-1+4].GetNormalizedPlot().Draw();
 	}
-	canvas->SaveAs("output/all_lhyquid3v_div.png");
+	canvas->SaveAs("output/therminator_peripheral_div.png");
 	delete canvas;
 	gStyle->SetPadGridX(false);
 	gStyle->SetPadGridY(false);
