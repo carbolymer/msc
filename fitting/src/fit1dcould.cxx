@@ -1,8 +1,11 @@
 #include "fit1dcould.hxx"
 
+using namespace std;
+
 TGraph *calckcoulggg;
-std::string plot1dName;
-std::string config1dName;
+string plot1dName;
+string defaultConfigName;
+string config1dName;
 
 Double_t fungek(Double_t *x, Double_t *par)
 {
@@ -43,11 +46,13 @@ bool fit1dcould(const char *fileName, Double_t &Rinv, Double_t &RinvE)
   TFile *ifk = new TFile("data/ffcomp.root");
   calckcoulggg = (TGraph *) ifk->Get("KCoulomb");
 
-  std::ifstream configFile(config1dName.c_str());
+  ifstream configFile(config1dName.c_str());
   if(configFile.fail())
   {
-    configFile.open("data/fit1d.conf");
-    std::cout << "Loading custom config: " << config1dName << std::endl;
+    configFile.open(defaultConfigName.c_str());
+    cout << "Loading default config: " << defaultConfigName << endl;
+  } else {
+    cout << "Loading custom config: " << config1dName << endl;
   }
 
   TF1 *funq = new TF1("funq",fungek,0.0,1.0,7);
@@ -60,7 +65,7 @@ bool fit1dcould(const char *fileName, Double_t &Rinv, Double_t &RinvE)
     if(buffer[0] == '\0')
       continue;
 
-    std::stringstream(buffer) >> value;
+    stringstream(buffer) >> value;
     configFile >> type;
     if(type == 'L')
       funq->SetParameter(parameterNumber,value);    
@@ -95,6 +100,9 @@ bool fit1dcould(const char *fileName, Double_t &Rinv, Double_t &RinvE)
   TFitResultPtr result = ratq->Fit(funq,"NS","",0.001,0.5);
 
   Rinv = result->Value(2);
+  if(Rinv < 0)
+    Rinv *= -1.0;
+
   RinvE = result->FitResult::Error(2);
 
   TCanvas *canfit = new TCanvas ("canfit","canfit",800,600);
@@ -111,20 +119,25 @@ int main(int argc, char **argv)
 
   if(argc < 5)
   {
-    std::cout << "Example:" << std::endl
-      << argv[0] << " file ktmin ktmax type" << std::endl
-      << argv[0] << " outfilekk51a.root 0.12 0.4 kk" << std::endl;
+    cout << "Example:" << endl
+      << argv[0] << " file ktmin ktmax type" << endl
+      << argv[0] << " outfilekk51a.root 0.12 0.4 kk" << endl;
       return 1;
   }
-  std::string pairType(argv[3]);
+  string pairType = argv[4];
+  string outputDirectory = argv[4];
+  pairType = basename( (char*) pairType.c_str());
+  outputDirectory = dirname( (char*) outputDirectory.c_str());
+  string centrality = basename( (char*) outputDirectory.c_str());
 
-  plot1dName = std::string(argv[4]) + std::string(argv[2]) + std::string("fit1d.png");
-  config1dName = std::string(argv[4]) + std::string(argv[2]) + std::string("fit1d.conf");
+  defaultConfigName = string("data/fit1d.") + pairType + string(".conf");
+  plot1dName = string(argv[4]) + string(argv[2]) + string("fit1d.png");
+  config1dName = string("data/") + string("fit1d.") + centrality + string(".") + pairType + string(".") + string(argv[2]) + string(".conf");
 
   fit1dcould(argv[1], Rinv, dRinv);
 
-  std::ofstream RinvFile((std::string(argv[4]) + std::string("_Rinv.out")).c_str(), std::ifstream::app);
+  ofstream RinvFile((string(argv[4]) + string("_Rinv.out")).c_str(), ifstream::app);
 
-  RinvFile << argv[2] << "\t" << argv[3] << "\t" << Rinv << "\t" << dRinv << std::endl;
+  RinvFile << argv[2] << "\t" << argv[3] << "\t" << Rinv << "\t" << dRinv << endl;
   RinvFile.close();
 }

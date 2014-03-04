@@ -12,6 +12,7 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <libgen.h>
 
 Double_t fungek(Double_t *x, Double_t *par);
 bool fit1dcould(const char *fileName, Double_t &Rinv, Double_t &RinvE);

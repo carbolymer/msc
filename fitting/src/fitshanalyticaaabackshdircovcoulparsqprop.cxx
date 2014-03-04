@@ -914,8 +914,8 @@ void fitshanalyticreal( char *pref,
 
   cout << "Norm   " << fitter->GetParameter(6) << " +/- " << fitter->GetParError(6)*chimult << endl;
   cout << "Lambda " << fitter->GetParameter(3) << " +/- " << fitter->GetParError(3)*chimult << endl;
-  lambda = fitter->GetParError(3);
-  dlambda = lambda*chimult;
+  lambda = fitter->GetParameter(3);
+  dlambda = fitter->GetParError(3)*chimult;
   cout << "Rout   " << fitter->GetParameter(0)*0.197327 << " +/- " << fitter->GetParError(0)*0.197327*chimult << endl;
   cout << "Rside  " << fitter->GetParameter(1)*0.197327 << " +/- " << fitter->GetParError(1)*0.197327*chimult << endl;
   cout << "Rlong  " << fitter->GetParameter(2)*0.197327 << " +/- " << fitter->GetParError(2)*0.197327*chimult << endl;
