@@ -197,16 +197,27 @@ void fillGraph(std::string fileName, TGraphErrors *graph, unsigned int iParticle
 	{
 		for(i=0; i < 256; ++i)
 			buffer[i] = '\0';
-    	infile >> buffer;
-    	if(buffer[0] == '\0')
-    		continue;
-    	i = graph->GetN();
+    infile >> buffer;
+    if(buffer[0] == '\0')
+    	continue;
 
-    	std::stringstream(buffer) >> kTmin;
-    	infile >> kTmax;
-    	infile >> R;
-    	infile >> dR;
-    	kT = (kTmax + kTmin)/2;
+    std::stringstream(buffer) >> kTmin;
+    infile >> kTmax;
+    infile >> R;
+		for(i=0; i < 256; ++i)
+			buffer[i] = '\0';
+    infile >> buffer;
+    if(buffer[1] == 'n') // nan hax
+    	dR = 0;
+    else
+    	std::stringstream(buffer) >> dR;
+    if( R != R )
+    	R = 0;
+    if( dR != dR)
+    	dR = 0;
+    cout << "\t" << fileName << "\t******** R:" << R << endl;
+    cout << "\t" << fileName << "\t******** dR:" << dR << endl;
+    kT = (kTmax + kTmin)/2;
 		mT = TMath::Sqrt(
 			TMath::Power(kT,2)
 			+ TMath::Power(particleMasses[iParticle],2));
@@ -216,6 +227,7 @@ void fillGraph(std::string fileName, TGraphErrors *graph, unsigned int iParticle
 			R /= TMath::Sqrt( (TMath::Sqrt(gamma) + 2) / 3 );
 		}
 		if(DEBUG) std::cout << mT << "\t" << R << "\t+/- " << dR << std::endl;
+    i = graph->GetN();
 		graph->SetPoint(i, mT, R);
 		graph->SetPointError(i, 0, dR);
 	}
