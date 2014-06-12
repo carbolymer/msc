@@ -2,6 +2,7 @@
 #define _MULTIFITPLOT_CXX_
 
 #include <sstream>
+#include <vector>
 #include <TF1.h>
 #include "MultiPlot.cxx"
 
@@ -23,6 +24,14 @@ protected:
 		_fittingFunction = new TF1(*rhs._fittingFunction);
 		MultiPlot::_copyIntoMe(rhs);
 		return *this;
+	}
+
+	const bool isInArray(const vector<unsigned short> &array, const unsigned short &value)
+	{
+		for(unsigned int i = 0; i < array.size(); ++i)
+			if(array[i] == value)
+				return true;
+		return false;
 	}
 
 public:
@@ -70,6 +79,13 @@ public:
 
 	void Fit()
 	{
+		Fit(vector<unsigned short>());
+	}
+
+	// Argument contains numbers of datasets which will be fitted
+	// 
+	void Fit(vector<unsigned short> graphFilterIndices)
+	{
 		Double_t *ey, *x, *y, it =0, nPoints = 0;
 		for(int i = 0; i < graphCount; ++i)
 			nPoints += graphs[i]->GetN();
@@ -77,6 +93,11 @@ public:
 		TGraphErrors *allPoints = new TGraphErrors();
 		for(int i = 0; i < graphCount; ++i)
 		{
+			if(graphFilterIndices.size() != 0)
+			{
+				if(!isInArray(graphFilterIndices,i))
+					continue;
+			}
 			nPoints = graphs[i]->GetN();
 			x = graphs[i]->GetX();
 			ey = graphs[i]->GetEY();

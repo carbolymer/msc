@@ -5,7 +5,7 @@
 #include <TLegend.h>
 #include <TLatex.h>
 #include <TGraphErrors.h>
-const int graphCount = 3;
+const unsigned int graphCount = 3;
 
 typedef struct
 {

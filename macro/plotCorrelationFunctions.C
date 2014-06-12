@@ -11,8 +11,9 @@
 #include <TLatex.h>
 
 #define LABELTEST false
-
+const int rebinFactor = 2;
 const int pairTypesNumber = 8;
+const int colorTable[] = {1,2,4,6,8,9,12,46};
 
 typedef struct
 {
@@ -33,15 +34,17 @@ const Int_t
 		markerStyle = 0,
 		markerColor = 0,
 		lineColor = 4;
+Width_t
+		lineWidth = 2;
 const Float_t
 		titleSize = 0.08,
 		titleOffset = 1.3,
 		labelOffset = 0.005,
 		labelSize = 0.06,
 		legendX1 = 0.65,
-		legendY1 = 0.47,
+		legendY1 = 0.40,
 		legendX2 = 0.999,
-		legendY2 = 0.63,
+		legendY2 = 0.70,
 		markerSize = 2;
 
 void loadCentralityBin(
@@ -61,6 +64,7 @@ void loadCentralityBin(
 void Draw(const char* pairName, const char* canvasName, std::vector<CorrelationFunction> &plots, bool isIdentical = true);
 void DrawSinglePlot(TH1D* correlationFunction, const char *title, unsigned int&);
 void SetRanges(TH1D* correlationFunction, const char* pairType, const char* functionType);
+void Rebin(TH1D *plot);
 
 int plotCorrelationFunctions()
 {
@@ -75,15 +79,51 @@ int plotCorrelationFunctions()
 		pipu;
 
 	loadCentralityBin(
-		"/home/mgalazyn/tpi_out/lhyquid3vb8.7",
+		"/mnt/data2/Models/tpi_output/lhyquid3vb2",
 		"lhyquid3v",
-		"b = 8.7 fm",
+		"b = 2.3 fm",
+		pipi, pp, kk, kp, pik, piku, pip, pipu);
+
+	// loadCentralityBin(
+	// 	"/mnt/data2/Models/tpi_output/lhyquid3vb3",
+	// 	"lhyquid3v",
+	// 	"b = 3.1 fm",
+	// 	pipi, pp, kk, kp, pik, piku, pip, pipu);
+
+	loadCentralityBin(
+		"/mnt/data2/Models/tpi_output/lhyquid3vb5.7",
+		"lhyquid3v",
+		"b = 5.7 fm",
 		pipi, pp, kk, kp, pik, piku, pip, pipu);
 
 	loadCentralityBin(
-		"/home/mgalazyn/tpi_out/lhyquid3vb10.9",
+		"/mnt/data2/Models/tpi_output/lhyquid3vb7.4",
+		"lhyquid3v",
+		"b = 7.4 fm",
+		pipi, pp, kk, kp, pik, piku, pip, pipu);
+
+	// loadCentralityBin(
+	// 	"/mnt/data2/Models/tpi_output/lhyquid3vb8.7",
+	// 	"lhyquid3v",
+	// 	"b = 8.7 fm",
+	// 	pipi, pp, kk, kp, pik, piku, pip, pipu);
+
+	// loadCentralityBin(
+	// 	"/mnt/data2/Models/tpi_output/lhyquid3vb9.9",
+	// 	"lhyquid3v",
+	// 	"b = 9.9 fm",
+	// 	pipi, pp, kk, kp, pik, piku, pip, pipu);
+
+	loadCentralityBin(
+		"/mnt/data2/Models/tpi_output/lhyquid3vb10.9",
 		"lhyquid3v",
 		"b = 10.9 fm",
+		pipi, pp, kk, kp, pik, piku, pip, pipu);
+
+	loadCentralityBin(
+		"/mnt/data2/Models/tpi_output/lhyquid3vb11.9",
+		"lhyquid3v",
+		"b = 11.9 fm",
 		pipi, pp, kk, kp, pik, piku, pip, pipu);
 
 	gStyle->SetOptStat(0);
@@ -94,14 +134,14 @@ int plotCorrelationFunctions()
 	gStyle->SetPadLeftMargin(0.22);
 	gStyle->SetPadRightMargin(0.03);
 
-	Draw("\\pi-\\pi","pipi",pipi);
+	Draw("#pi-#pi","pipi",pipi);
 	Draw("K-K","kk",kk);
 	Draw("p-p","pp",pp);
 	Draw("K-p","kp",kp, false);
-	Draw("\\pi-K like sign","pik",pik, false);
-	Draw("\\pi-K unlike sign","piku",piku, false);
-	Draw("\\pi-p like sign","pip",pip, false);
-	Draw("\\pi-p unlike sign","pipu",pipu, false);
+	Draw("#pi-K like sign","pik",pik, false);
+	Draw("#pi-K unlike sign","piku",piku, false);
+	Draw("#pi-p like sign","pip",pip, false);
+	Draw("#pi-p unlike sign","pipu",pipu, false);
 
 	return 0;
 }
@@ -355,17 +395,18 @@ void Draw(const char* pairName, const char* canvasName, std::vector<CorrelationF
 	{
 		canv->cd(++canvasNumber1);
 		TLatex Tl;
-   		Tl.SetTextSize(0.16);
-   		Tl.DrawLatex(0.4,0.5, (std::string("#font[12]{")+std::string(pairName)+std::string("}")).c_str());
+   	Tl.SetTextSize(0.16);
+   	Tl.DrawLatex(0.4,0.5, (std::string("#font[12]{")+std::string(pairName)+std::string("}")).c_str());
 	}
 
-	canv->SaveAs((std::string(canvasName)+std::string(".eps")).c_str());
-	// canv->SaveAs((std::string(canvasName)+std::string(".png")).c_str());
+	// canv->SaveAs((std::string(canvasName)+std::string(".eps")).c_str());
+	canv->SaveAs((std::string(canvasName)+std::string(".png")).c_str());
 	// canv->SaveAs((std::string(canvasName)+std::string(".root")).c_str());
 }
 
 void DrawSinglePlot(TH1D* correlationFunction, const char* title, unsigned int &i)
 {
+	Rebin(correlationFunction);
 	correlationFunction->SetAxisRange(0,0.2);
 	if(i == 0)
 	{
@@ -379,11 +420,11 @@ void DrawSinglePlot(TH1D* correlationFunction, const char* title, unsigned int &
 		correlationFunction->GetXaxis()->SetLabelOffset(labelOffset);
 		correlationFunction->GetXaxis()->SetLabelSize(labelSize);
 		correlationFunction->SetTitle(title);
-		i = 1;
 	}
 	else
 		correlationFunction->Draw("HISTL SAME");
-	correlationFunction->SetLineColor(i++);
+	correlationFunction->SetLineColor(colorTable[i++]);
+	correlationFunction->SetLineWidth(lineWidth);
 	// correlationFunction->SetMarkerColor(i++);
 	// correlationFunction->SetLineColor(16);
 
@@ -553,7 +594,7 @@ void SetRanges(TH1D* correlationFunction, const char* pairType, const char* func
 		// correlationFunction->SetAxisRange(-0.01,0.03,"Y");
 		correlationFunction->SetAxisRange(0,0.12);
 		correlationFunction->SetMinimum(-0.005);
-		correlationFunction->SetMaximum(0.021);
+		correlationFunction->SetMaximum(0.023);
 	}
 	else if(sFunctionType.compare("SH11") == 0 && sPairType.compare("piku") == 0)
 	{
@@ -588,8 +629,8 @@ void SetRanges(TH1D* correlationFunction, const char* pairType, const char* func
 		// correlationFunction->GetYaxis()->SetLimits(-0.11,0.11);
 		// correlationFunction->GetYaxis()->SetRangeUser(-0.11,0.11);
 		// correlationFunction->SetAxisRange(-0.11,0.11,"Y");
-		correlationFunction->SetMinimum(-0.11);
-		correlationFunction->SetMaximum( 0.11);
+		correlationFunction->SetMinimum(-0.06);
+		correlationFunction->SetMaximum( 0.03);
 	}
 	else if(sFunctionType.compare("SH20") == 0 && sPairType.compare("kp") == 0)
 	{
@@ -597,8 +638,8 @@ void SetRanges(TH1D* correlationFunction, const char* pairType, const char* func
 		// correlationFunction->GetYaxis()->SetRangeUser(-0.02,0.02);
 		// correlationFunction->SetAxisRange(-0.02,0.02,"Y");
 		correlationFunction->SetAxisRange(0,0.12);
-		correlationFunction->SetMinimum(-0.02);
-		correlationFunction->SetMaximum(0.02);
+		correlationFunction->SetMinimum(-0.015);
+		correlationFunction->SetMaximum(0.015);
 	}
 	else if(sFunctionType.compare("SH20") == 0 && sPairType.compare("pik") == 0)
 	{
@@ -616,7 +657,7 @@ void SetRanges(TH1D* correlationFunction, const char* pairType, const char* func
 		// correlationFunction->SetAxisRange(-0.01,0.01,"Y");
 		correlationFunction->SetAxisRange(0,0.12);
 		correlationFunction->SetMinimum(-0.004);
-		correlationFunction->SetMaximum(0.004);
+		correlationFunction->SetMaximum(0.002);
 	}
 	else if(sFunctionType.compare("SH20") == 0 && sPairType.compare("pip") == 0)
 	{
@@ -624,8 +665,8 @@ void SetRanges(TH1D* correlationFunction, const char* pairType, const char* func
 		// correlationFunction->GetYaxis()->SetRangeUser(-0.01,0.01);
 		// correlationFunction->SetAxisRange(-0.01,0.01,"Y");
 		correlationFunction->SetAxisRange(0,0.12);
-		correlationFunction->SetMinimum(-0.005);
-		correlationFunction->SetMaximum(0.005);
+		correlationFunction->SetMinimum(-0.002);
+		correlationFunction->SetMaximum(0.004);
 	}
 	else if(sFunctionType.compare("SH20") == 0 && sPairType.compare("pipi") == 0)
 	{
@@ -642,7 +683,7 @@ void SetRanges(TH1D* correlationFunction, const char* pairType, const char* func
 		// correlationFunction->SetAxisRange(-0.015,015,"Y");
 		correlationFunction->SetAxisRange(0,0.12);
 		correlationFunction->SetMinimum(-0.004);
-		correlationFunction->SetMaximum(0.004);
+		correlationFunction->SetMaximum(0.001);
 	}
 	else if(sFunctionType.compare("SH20") == 0 && sPairType.compare("pp") == 0)
 	{
@@ -658,8 +699,8 @@ void SetRanges(TH1D* correlationFunction, const char* pairType, const char* func
 		// correlationFunction->GetYaxis()->SetLimits(-0.11,0.11);
 		// correlationFunction->GetYaxis()->SetRangeUser(-0.11,0.11);
 		// correlationFunction->SetAxisRange(-0.11,0.11,"Y");
-		correlationFunction->SetMinimum(-0.11);
-		correlationFunction->SetMaximum(0.11);
+		correlationFunction->SetMinimum(-0.02);
+		correlationFunction->SetMaximum(0.02);
 	}
 	else if(sFunctionType.compare("SH22") == 0 && sPairType.compare("kp") == 0)
 	{
@@ -667,8 +708,8 @@ void SetRanges(TH1D* correlationFunction, const char* pairType, const char* func
 		// correlationFunction->GetYaxis()->SetRangeUser(-0.02,0.02);
 		// correlationFunction->SetAxisRange(-0.02,0.02,"Y");
 		correlationFunction->SetAxisRange(0,0.12);
-		correlationFunction->SetMinimum(-0.015);
-		correlationFunction->SetMaximum(0.015);
+		correlationFunction->SetMinimum(-0.01);
+		correlationFunction->SetMaximum(0.01);
 	}
 	else if(sFunctionType.compare("SH22") == 0 && sPairType.compare("pik") == 0)
 	{
@@ -676,8 +717,8 @@ void SetRanges(TH1D* correlationFunction, const char* pairType, const char* func
 		// correlationFunction->GetYaxis()->SetRangeUser(-0.005,0.005);
 		// correlationFunction->SetAxisRange(-0.005,0.005,"Y");
 		correlationFunction->SetAxisRange(0,0.12);
-		correlationFunction->SetMinimum(-0.003);
-		correlationFunction->SetMaximum(0.003);
+		correlationFunction->SetMinimum(-0.004);
+		correlationFunction->SetMaximum(0.002);
 	}
 	else if(sFunctionType.compare("SH22") == 0 && sPairType.compare("piku") == 0)
 	{
@@ -685,8 +726,8 @@ void SetRanges(TH1D* correlationFunction, const char* pairType, const char* func
 		// correlationFunction->GetYaxis()->SetRangeUser(-0.015,0.015);
 		// correlationFunction->SetAxisRange(-0.015,0.015,"Y");
 		correlationFunction->SetAxisRange(0,0.12);
-		correlationFunction->SetMinimum(-0.004);
-		correlationFunction->SetMaximum(0.004);
+		correlationFunction->SetMinimum(-0.002);
+		correlationFunction->SetMaximum(0.005);
 	}
 	else if(sFunctionType.compare("SH22") == 0 && sPairType.compare("pip") == 0)
 	{
@@ -712,7 +753,7 @@ void SetRanges(TH1D* correlationFunction, const char* pairType, const char* func
 		// correlationFunction->SetAxisRange(-0.02,0.02,"Y");
 		correlationFunction->SetAxisRange(0,0.12);
 		correlationFunction->SetMinimum(-0.005);
-		correlationFunction->SetMaximum(0.005);
+		correlationFunction->SetMaximum(0.006);
 	}
 	else if(sFunctionType.compare("SH22") == 0 && sPairType.compare("pp") == 0)
 	{
@@ -726,4 +767,11 @@ void SetRanges(TH1D* correlationFunction, const char* pairType, const char* func
 	{
 		std::cout << "Unknown pair type: " << sPairType << " and function name: " << sFunctionType << std::endl;
 	}
+}
+
+void Rebin(TH1D *plot) {
+	if(rebinFactor == 1)
+		return;
+	plot->Rebin(rebinFactor);
+	plot->Scale(1.0/rebinFactor);
 }
