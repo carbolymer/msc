@@ -10,6 +10,8 @@
 #include "../src/MultiPlot.cxx"
 #include "../src/MultiFitPlot.cxx"
 
+using namespace std;
+
 #define DEBUG false
 
 const Double_t particleMasses[3] = { // in GeV / c^2
@@ -26,8 +28,8 @@ void createPrfPlotAllInONe(MultiFitPlot Rinv[], MultiFitPlot Rlcms[], int nCentr
 void createPrfPlots(MultiFitPlot Rinv[], MultiFitPlot Rlcms[], int nCentralities);
 void fillGraph(std::string fileName, TGraphErrors *graph, unsigned int iParticle, bool isInvariant = kFALSE);
 
-int plotter()
-{	
+int main()
+{
 	gStyle->SetOptStat(0);
 	gStyle->SetLabelSize(0.06, "xyz");
 	gStyle->SetPadTopMargin(0.023);
@@ -39,74 +41,80 @@ int plotter()
 	MultiFitPlot::defaultFunction->SetParameter(0,1);
 	MultiFitPlot::defaultFunction->SetParameter(1,1);
 
+	MultiFitPlot qqq;
+	qqq.GetDispersionPlot(MultiFitPlot::Normalization);
+
+	return 0;
+
+
 	std::string prefixes[graphCount];
 	std::string graphNames[graphCount];
 
 	MultiFitPlot Rinv[numberOfCentralities];
 	MultiFitPlot Rlcms[numberOfCentralities];
 
-	prefixes[0] = "b2.3/kk";
-	prefixes[1] = "b2.3/pipi";
-	prefixes[2] = "b2.3/pp";
-	graphNames[0] = "K-K b = 2.3 fm";
-	graphNames[1] = "#pi-#pi b = 2.3 fm";
-	graphNames[2] = "p-p b = 2.3 fm";
+	prefixes[kaon] = "b2.3/kk";
+	prefixes[pion] = "b2.3/pipi";
+	prefixes[proton] = "b2.3/pp";
+	graphNames[kaon] = "K-K b = 2.3 fm";
+	graphNames[pion] = "#pi-#pi b = 2.3 fm";
+	graphNames[proton] = "p-p b = 2.3 fm";
 	createLcmsPlot(graphNames, prefixes, "b2.3", Rinv[0], Rlcms[0]);
 
-	prefixes[0] = "b3.1/kk";
-	prefixes[1] = "b3.1/pipi";
-	prefixes[2] = "b3.1/pp";
-	graphNames[0] = "K-K b = 3.1 fm";
-	graphNames[1] = "#pi-#pi b = 3.1 fm";
-	graphNames[2] = "p-p b = 3.1 fm";
+	prefixes[kaon] = "b3.1/kk";
+	prefixes[pion] = "b3.1/pipi";
+	prefixes[proton] = "b3.1/pp";
+	graphNames[kaon] = "K-K b = 3.1 fm";
+	graphNames[pion] = "#pi-#pi b = 3.1 fm";
+	graphNames[proton] = "p-p b = 3.1 fm";
 	createLcmsPlot(graphNames, prefixes, "b3.1", Rinv[1], Rlcms[1]);
 
-	prefixes[0] = "b5.7/kk";
-	prefixes[1] = "b5.7/pipi";
-	prefixes[2] = "b5.7/pp";
-	graphNames[0] = "K-K b = 5.7 fm";
-	graphNames[1] = "#pi-#pi b = 5.7 fm";
-	graphNames[2] = "p-p b = 5.7 fm";
+	prefixes[kaon] = "b5.7/kk";
+	prefixes[pion] = "b5.7/pipi";
+	prefixes[proton] = "b5.7/pp";
+	graphNames[kaon] = "K-K b = 5.7 fm";
+	graphNames[pion] = "#pi-#pi b = 5.7 fm";
+	graphNames[proton] = "p-p b = 5.7 fm";
 	createLcmsPlot(graphNames, prefixes, "b5.7", Rinv[2], Rlcms[2]);
 
-	prefixes[0] = "b7.4/kk";
-	prefixes[1] = "b7.4/pipi";
-	prefixes[2] = "b7.4/pp";
-	graphNames[0] = "K-K b=7.4 fm";
-	graphNames[1] = "#pi-#pi b=7.4 fm";
-	graphNames[2] = "p-p b=7.4 fm";
+	prefixes[kaon] = "b7.4/kk";
+	prefixes[pion] = "b7.4/pipi";
+	prefixes[proton] = "b7.4/pp";
+	graphNames[kaon] = "K-K b=7.4 fm";
+	graphNames[pion] = "#pi-#pi b=7.4 fm";
+	graphNames[proton] = "p-p b=7.4 fm";
 	createLcmsPlot(graphNames, prefixes, "b7.4", Rinv[3], Rlcms[3], 1);	
 
-	prefixes[0] = "b8.7/kk";
-	prefixes[1] = "b8.7/pipi";
-	prefixes[2] = "b8.7/pp";
-	graphNames[0] = "K-K b=8.7 fm";
-	graphNames[1] = "#pi-#pi b=8.7 fm";
-	graphNames[2] = "p-p b=8.7 fm";
+	prefixes[kaon] = "b8.7/kk";
+	prefixes[pion] = "b8.7/pipi";
+	prefixes[proton] = "b8.7/pp";
+	graphNames[kaon] = "K-K b=8.7 fm";
+	graphNames[pion] = "#pi-#pi b=8.7 fm";
+	graphNames[proton] = "p-p b=8.7 fm";
 	createLcmsPlot(graphNames, prefixes, "b8.7", Rinv[4], Rlcms[4], 1);
 
-	prefixes[0] = "b9.9/kk";
-	prefixes[1] = "b9.9/pipi";
-	prefixes[2] = "b9.9/pp";
-	graphNames[0] = "K-K b=9.9 fm";
-	graphNames[1] = "#pi-#pi b=9.9 fm";
-	graphNames[2] = "p-p b=9.9 fm";
+	prefixes[kaon] = "b9.9/kk";
+	prefixes[pion] = "b9.9/pipi";
+	prefixes[proton] = "b9.9/pp";
+	graphNames[kaon] = "K-K b=9.9 fm";
+	graphNames[pion] = "#pi-#pi b=9.9 fm";
+	graphNames[proton] = "p-p b=9.9 fm";
 	createLcmsPlot(graphNames, prefixes, "b9.9", Rinv[5], Rlcms[5], 1);
 
-	prefixes[0] = "b10.9/kk";
-	prefixes[1] = "b10.9/pipi";
-	prefixes[2] = "b10.9/pp";
-	graphNames[0] = "K-K b=10.9 fm";
-	graphNames[1] = "#pi-#pi b=10.9 fm";
-	graphNames[2] = "p-p b=10.9 fm";
+	prefixes[kaon] = "b10.9/kk";
+	prefixes[pion] = "b10.9/pipi";
+	prefixes[proton] = "b10.9/pp";
+	graphNames[kaon] = "K-K b=10.9 fm";
+	graphNames[pion] = "#pi-#pi b=10.9 fm";
+	graphNames[proton] = "p-p b=10.9 fm";
 	createLcmsPlot(graphNames, prefixes, "b10.9", Rinv[6], Rlcms[6], 2);
 
-	prefixes[0] = "b11.9/kk";
-	prefixes[1] = "b11.9/pipi";
-	prefixes[2] = "b11.9/pp";
-	graphNames[0] = "K-K b=11.9 fm";
-	graphNames[1] = "#pi-#pi b=11.9 fm";
-	graphNames[2] = "p-p b=11.9 fm";
+	prefixes[kaon] = "b11.9/kk";
+	prefixes[pion] = "b11.9/pipi";
+	prefixes[proton] = "b11.9/pp";
+	graphNames[kaon] = "K-K b=11.9 fm";
+	graphNames[pion] = "#pi-#pi b=11.9 fm";
+	graphNames[proton] = "p-p b=11.9 fm";
 	createLcmsPlot(graphNames, prefixes, "b11.9", Rinv[7], Rlcms[7], 2);
 
 	createPrfPlots(Rinv, Rlcms, numberOfCentralities);
@@ -179,24 +187,24 @@ void createLcmsPlot(std::string *graphNames, std::string *prefixes, const char *
 			break;
 	}
 
-	Rout.graphNames[0] = graphNames[0];
-	Rout.graphNames[1] = graphNames[1];
-	Rout.graphNames[2] = graphNames[2];
+	Rout.graphNames[kaon] = graphNames[kaon];
+	Rout.graphNames[pion] = graphNames[pion];
+	Rout.graphNames[proton] = graphNames[proton];
 
-	Rout.theme[0].markerColor = 1;
-	Rout.theme[0].lineColor = 1;
-	Rout.theme[0].markerSize = 1.5;
-	Rout.theme[0].markerStyle = 20;
+	Rout.theme[kaon].markerColor = 1;
+	Rout.theme[kaon].lineColor = 1;
+	Rout.theme[kaon].markerSize = 1.5;
+	Rout.theme[kaon].markerStyle = 20;
 
-	Rout.theme[1].markerColor = 4;
-	Rout.theme[1].lineColor = 4;
-	Rout.theme[1].markerSize = 1.4;
-	Rout.theme[1].markerStyle = 21;
+	Rout.theme[pion].markerColor = 4;
+	Rout.theme[pion].lineColor = 4;
+	Rout.theme[pion].markerSize = 1.4;
+	Rout.theme[pion].markerStyle = 21;
 
-	Rout.theme[2].markerColor = 2;
-	Rout.theme[2].lineColor = 2;
-	Rout.theme[2].markerSize = 1.5;
-	Rout.theme[2].markerStyle = 22;
+	Rout.theme[proton].markerColor = 2;
+	Rout.theme[proton].lineColor = 2;
+	Rout.theme[proton].markerSize = 1.5;
+	Rout.theme[proton].markerStyle = 22;
 
 	MultiFitPlot Rside(Rout);
 	MultiFitPlot Rlong(Rout);
@@ -208,7 +216,7 @@ void createLcmsPlot(std::string *graphNames, std::string *prefixes, const char *
 	Rlcms.labels = ";m_{T} [GeV/c^{2}];R_{LCMS} [fm]";
 	Rinv.labels = ";m_{T} [GeV/c^{2}];R_{inv}/[(#sqrt{#gamma}+2)/3]^{1/2} [fm]";
 
-	for( int j = 0; j < graphCount; ++j)
+	for(unsigned int j = 0; j < graphCount; ++j)
 	{
 		if(DEBUG) std::cout << std::endl << "  ###  " << prefixes[j] << "  ###   " << std::endl;
 		fillGraph(std::string("data/") + prefixes[j] + std::string("_Rout.out"), Rout.graphs[j], j);
@@ -252,13 +260,13 @@ void createLcmsPlot(std::string *graphNames, std::string *prefixes, const char *
 	gStyle->SetPadGridY(true);
 	canvas->Divide(2,2);
 	canvas->cd(1);
-	Rout.GetNormalizedPlot().Draw();
+	Rout.GetDispersionPlot(MultiFitPlot::Normalization).Draw();
 	canvas->cd(2);
-	Rside.GetNormalizedPlot().Draw();
+	Rside.GetDispersionPlot(MultiFitPlot::Normalization).Draw();
 	canvas->cd(3);
-	Rlong.GetNormalizedPlot().Draw();
+	Rlong.GetDispersionPlot(MultiFitPlot::Normalization).Draw();
 	canvas->cd(4);
-	Rlcms.GetNormalizedPlot().Draw();
+	Rlcms.GetDispersionPlot(MultiFitPlot::Normalization).Draw();
 	canvas->SaveAs((std::string("output/")+fileName+std::string("_div.png")).c_str());
 	delete canvas;
 	gStyle->SetPadGridX(false);
@@ -336,10 +344,10 @@ void createPrfPlots(MultiFitPlot *Rinv, MultiFitPlot *Rlcms, int nCentralities)
 	{
 		canvas->cd(i);
 		Rinv[i-1].labels = ";m_{T} [GeV/c^{2}];R_{inv}/ R_{inv}^{FIT}";
-		Rinv[i-1].GetNormalizedPlot().Draw();
+		Rinv[i-1].GetDispersionPlot(MultiFitPlot::Normalization).Draw();
 		canvas->cd(i+nCentralities);
 		Rlcms[i-1].labels = ";m_{T} [GeV/c^{2}];R_{LCMS} / R_{LCMS}^{FIT}";
-		Rlcms[i-1].GetNormalizedPlot().Draw();
+		Rlcms[i-1].GetDispersionPlot(MultiFitPlot::Normalization).Draw();
 	}
 	canvas->SaveAs("output/therminator_central_div.png");
 	delete canvas;
@@ -352,10 +360,10 @@ void createPrfPlots(MultiFitPlot *Rinv, MultiFitPlot *Rlcms, int nCentralities)
 	{
 		canvas->cd(i);
 		Rinv[i-1+4].labels = ";m_{T} [GeV/c^{2}];R_{inv}/ R_{inv}^{FIT}";
-		Rinv[i-1+4].GetNormalizedPlot().Draw();
+		Rinv[i-1+4].GetDispersionPlot(MultiFitPlot::Normalization).Draw();
 		canvas->cd(i+nCentralities);
 		Rlcms[i-1+4].labels = ";m_{T} [GeV/c^{2}];R_{LCMS} / R_{LCMS}^{FIT}";
-		Rlcms[i-1+4].GetNormalizedPlot().Draw();
+		Rlcms[i-1+4].GetDispersionPlot(MultiFitPlot::Normalization).Draw();
 	}
 	canvas->SaveAs("output/therminator_peripheral_div.png");
 	delete canvas;

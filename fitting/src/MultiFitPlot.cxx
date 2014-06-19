@@ -3,9 +3,13 @@
 
 #include <sstream>
 #include <vector>
+#include <utility>
 #include <TF1.h>
 #include "MultiPlot.cxx"
 
+using namespace std;
+
+typedef std::pair<Double_t,Double_t> DValWithE;
 
 class MultiFitPlot: public MultiPlot
 {
@@ -26,7 +30,7 @@ protected:
 		return *this;
 	}
 
-	const bool isInArray(const vector<unsigned short> &array, const unsigned short &value)
+	bool isInArray(const vector<unsigned short> &array, const unsigned short &value)
 	{
 		for(unsigned int i = 0; i < array.size(); ++i)
 			if(array[i] == value)
@@ -35,6 +39,18 @@ protected:
 	}
 
 public:
+
+	enum DispersionPlotType
+	{
+		Normalization,
+		Difference,
+		Variance,
+		
+			// (x - fittedFunction(x))/fittedFunction(x)
+		
+		Standarization
+	};
+
 	static TF1* defaultFunction;
 
 	MultiFitPlot() :
@@ -87,11 +103,11 @@ public:
 	void Fit(vector<unsigned short> graphFilterIndices)
 	{
 		Double_t *ey, *x, *y, it =0, nPoints = 0;
-		for(int i = 0; i < graphCount; ++i)
+		for( unsigned int i = 0; i < graphCount; ++i)
 			nPoints += graphs[i]->GetN();
 
 		TGraphErrors *allPoints = new TGraphErrors();
-		for(int i = 0; i < graphCount; ++i)
+		for( unsigned int i = 0; i < graphCount; ++i)
 		{
 			if(graphFilterIndices.size() != 0)
 			{
@@ -102,10 +118,10 @@ public:
 			x = graphs[i]->GetX();
 			ey = graphs[i]->GetEY();
 			y = graphs[i]->GetY();
-			for(int j = 0; j < nPoints; ++j)
+			for(unsigned int j = 0; j < nPoints; ++j)
 			{
 				allPoints->SetPoint(it,x[j],y[j]);
-				allPoints->SetPointError(it,0,y[j]);
+				allPoints->SetPointError(it,0,ey[j]);
 				++it;
 			}
 		}
@@ -156,11 +172,28 @@ public:
 					+ std::string("}{#gamma = ") + g.str() + pm + gE.str() + std::string("}")).c_str() );
 		}
 	}
+	private:
+	void CalculateDispersionFactor(DispersionPlotType type, Double_t x, Double_t y)
+	{
+		switch(type)
+		{
+			case Normalization :
+				std::cout << "sdf" << std::endl;
+				break;
+			case Standarization :
+				break;
+			case Variance :
+				break;
+			case Difference :
+				break;
+		}
+	}
+public:
 
-	MultiPlot& GetNormalizedPlot()
+	MultiPlot& GetDispersionPlot(DispersionPlotType type)
 	{
 		MultiPlot *mp = new MultiPlot();
-		int i, j, nPoints;
+		unsigned int i, j, nPoints;
 		Double_t *yErrors;
 		Double_t x,y;
 		mp->labels = labels;

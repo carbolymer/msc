@@ -7,6 +7,15 @@
 #include <TGraphErrors.h>
 const unsigned int graphCount = 3;
 
+using namespace std;
+
+enum ParticleType
+{
+	kaon = 0,
+	pion = 1,
+	proton = 2
+};
+
 typedef struct
 {
 	Int_t markerColor;
@@ -42,15 +51,15 @@ protected:
 
 		_axes = new TH1F(*rhs._axes);
 		_legend = new TLegend(*rhs._legend);
-		for(int i = 0; i < graphCount; ++i)
+		for(unsigned int i = 0; i < graphCount; ++i)
 		{
 			graphNames[i] = rhs.graphNames[i];
 			graphs[i] = new TGraphErrors(*rhs.graphs[i]);
 			theme[i] = rhs.theme[i];
 		}
-		kaons = graphs[0];
-		pions = graphs[1];
-		protons = graphs[2];
+		kaons = graphs[kaon];
+		pions = graphs[pion];
+		protons = graphs[proton];
 		return *this;
 	}
 
@@ -93,7 +102,7 @@ public:
 		labels = _labels;
 		_axes = new TH1F;
 		_legend = new TLegend(legendX1, legendY1, legendX2, legendY2);
-		for(int i = 0; i < graphCount; ++i)
+		for(unsigned int i = 0; i < graphCount; ++i)
 			graphs[i] = new TGraphErrors;
 		kaons = graphs[0];
 		pions = graphs[1];
@@ -126,7 +135,7 @@ public:
 		_axes->SetTitle(labels.c_str());
 
 		_legend->Clear();
-		for(int i = 0; i < graphCount; ++i)
+		for(unsigned int i = 0; i < graphCount; ++i)
 		{
 			graphs[i]->Draw("SAMEP*");
 			graphs[i]->SetMarkerColor(theme[i].markerColor);
