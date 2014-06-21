@@ -42,12 +42,11 @@ public:
 
 	enum DispersionPlotType
 	{
-		Normalization,
+		// y / fittedFunction(x)
+		Division,
+		// y - fittedFunction(x)
 		Difference,
-		Variance,
-		
-			// (x - fittedFunction(x))/fittedFunction(x)
-		
+		// (y - fittedFunction(x) ) / fittedFunction(x)
 		Standarization
 	};
 
@@ -172,33 +171,64 @@ public:
 					+ std::string("}{#gamma = ") + g.str() + pm + gE.str() + std::string("}")).c_str() );
 		}
 	}
-	private:
-	void CalculateDispersionFactor(DispersionPlotType type, Double_t x, Double_t y)
+
+private:
+	DValWithE CalculateDispersionFactor(DispersionPlotType type, Double_t x, Double_t y, Double_t yError)
 	{
+		DValWithE result;
 		switch(type)
 		{
-			case Normalization :
-				std::cout << "sdf" << std::endl;
+			case Difference :
+				result.first = y - _fittingFunction->Eval(x);
+				result.second = yError;
+				break;
+			case Division :
+				result.first = y/_fittingFunction->Eval(x);
+				result.second = yError/_fittingFunction->Eval(x);
 				break;
 			case Standarization :
-				break;
-			case Variance :
-				break;
-			case Difference :
+				result.first = (y - _fittingFunction->Eval(x))/_fittingFunction->Eval(x);
+				result.second = yError/_fittingFunction->Eval(x) - 1;
 				break;
 		}
+		return result;
 	}
+
+	pair<Double_t,Double_t> GetPlotYRange(DispersionPlotType type)
+	{
+		pair<Double_t,Double_t> yRange;
+		switch(type)
+		{
+			case Difference :
+				yRange.first = -1;
+				yRange.second = 1;
+				break;
+			case Division :
+				yRange.first = 0.7;
+				yRange.second = 1.4;
+				break;
+			case Standarization :
+				yRange.first = -0.2;
+				yRange.second = 0.5;
+				break;
+		}
+		return yRange;
+	}
+
 public:
 
 	MultiPlot& GetDispersionPlot(DispersionPlotType type)
 	{
 		MultiPlot *mp = new MultiPlot();
 		unsigned int i, j, nPoints;
+		DValWithE point;
+		pair<Double_t,Double_t> yRange = GetPlotYRange(type);
+
 		Double_t *yErrors;
 		Double_t x,y;
 		mp->labels = labels;
-		mp->yMin = 0.7;
-		mp->yMax = 1.4;
+		mp->yMin = yRange.first;
+		mp->yMax = yRange.second;
 		mp->legendY1 = 0.95;
 		for(j=0 ; j < graphCount; ++j )
 		{
@@ -212,8 +242,9 @@ public:
 			for(j = 0; j < nPoints; ++j)
 			{
 				graphs[i]->GetPoint(j, x, y);
-				mp->graphs[i]->SetPoint(j, x, y/_fittingFunction->Eval(x));
-				mp->graphs[i]->SetPointError(j, 0, yErrors[i]/_fittingFunction->Eval(x));
+				point = CalculateDispersionFactor(type, x, y, yErrors[i]);
+				mp->graphs[i]->SetPoint(j, x, point.first);
+				mp->graphs[i]->SetPointError(j, 0, point.second);
 			}
 		}
 		return *mp;
