@@ -28,6 +28,7 @@ void createPrfPlotAllInONe(MultiFitPlot Rinv[], MultiFitPlot Rlcms[], int nCentr
 void createPrfPlots(MultiFitPlot Rinv[], MultiFitPlot Rlcms[], int nCentralities);
 void fillGraph(std::string fileName, TGraphErrors *graph, unsigned int iParticle, bool isInvariant = kFALSE);
 
+// int plotter()
 int main()
 {
 	gStyle->SetOptStat(0);
@@ -288,25 +289,25 @@ void createLcmsPlot(std::string *graphNames, std::string *prefixes, const char *
 	delete canvas;
 
 
-	// * Standarization *
+	// * Squared Difference *
 
-	Rout.labels = ";m_{T} [GeV/c^{2}];R_{out} std R_{out}^{FIT}";
-	Rside.labels = ";m_{T} [GeV/c^{2}];R_{side} std R_{side}^{FIT}";
-	Rlong.labels = ";m_{T} [GeV/c^{2}];R_{long} std R_{long}^{FIT}";
-	Rlcms.labels = ";m_{T} [GeV/c^{2}];R_{LCMS} std R_{LCMS}^{FIT}";
+	Rout.labels = ";m_{T} [GeV/c^{2}];(R_{out}-R_{out}^{FIT})^{2}";
+	Rside.labels = ";m_{T} [GeV/c^{2}];(R_{side}-R_{side}^{FIT})^{2}";
+	Rlong.labels = ";m_{T} [GeV/c^{2}];(R_{long}-R_{long}^{FIT})^{2}";
+	Rlcms.labels = ";m_{T} [GeV/c^{2}];(R_{LCMS}-R_{LCMS}^{FIT})^{2}";
 
 	canvas = new TCanvas("canvas", "R_LCMS", 900, 800);
 	canvas->SetGrid();
 	canvas->Divide(2,2);
 	canvas->cd(1);
-	Rout.GetDispersionPlot(MultiFitPlot::Standarization).Draw();
+	Rout.GetDispersionPlot(MultiFitPlot::SquaredDifference).Draw();
 	canvas->cd(2);
-	Rside.GetDispersionPlot(MultiFitPlot::Standarization).Draw();
+	Rside.GetDispersionPlot(MultiFitPlot::SquaredDifference).Draw();
 	canvas->cd(3);
-	Rlong.GetDispersionPlot(MultiFitPlot::Standarization).Draw();
+	Rlong.GetDispersionPlot(MultiFitPlot::SquaredDifference).Draw();
 	canvas->cd(4);
-	Rlcms.GetDispersionPlot(MultiFitPlot::Standarization).Draw();
-	canvas->SaveAs((std::string("output/")+fileName+std::string("_std.png")).c_str());
+	Rlcms.GetDispersionPlot(MultiFitPlot::SquaredDifference).Draw();
+	canvas->SaveAs((std::string("output/")+fileName+std::string("_sqdiff.png")).c_str());
 	delete canvas;
 
 
@@ -404,10 +405,10 @@ void createPrfPlots(MultiFitPlot *Rinv, MultiFitPlot *Rlcms, int nCentralities)
 	for(int i = 1; i <= nCentralities; ++i)
 	{
 		canvas->cd(i);
-		Rinv[i-1+4].labels = ";m_{T} [GeV/c^{2}];R_{inv} - R_{inv}^{FIT}";
+		Rinv[i-1+4].labels = ";m_{T} [GeV/c^{2}];R_{inv}-R_{inv}^{FIT}";
 		Rinv[i-1+4].GetDispersionPlot(MultiFitPlot::Difference).Draw();
 		canvas->cd(i+nCentralities);
-		Rlcms[i-1+4].labels = ";m_{T} [GeV/c^{2}];R_{LCMS} - R_{LCMS}^{FIT}";
+		Rlcms[i-1+4].labels = ";m_{T} [GeV/c^{2}];R_{LCMS}-R_{LCMS}^{FIT}";
 		Rlcms[i-1+4].GetDispersionPlot(MultiFitPlot::Difference).Draw();
 	}
 	canvas->SaveAs("output/therminator_peripheral_diff.png");
@@ -448,7 +449,7 @@ void createPrfPlots(MultiFitPlot *Rinv, MultiFitPlot *Rlcms, int nCentralities)
 	delete canvas;
 
 
-	// *** Standarization ***
+	// *** Squared Difference ***
 
 	// therminator central
 	nCentralities = 4;
@@ -457,13 +458,13 @@ void createPrfPlots(MultiFitPlot *Rinv, MultiFitPlot *Rlcms, int nCentralities)
 	for(int i = 1; i <= nCentralities; ++i)
 	{
 		canvas->cd(i);
-		Rinv[i-1].labels = ";m_{T} [GeV/c^{2}];R_{inv} std R_{inv}^{FIT}";
-		Rinv[i-1].GetDispersionPlot(MultiFitPlot::Standarization).Draw();
+		Rinv[i-1].labels = ";m_{T} [GeV/c^{2}];(R_{inv}-R_{inv}^{FIT})^{2}";
+		Rinv[i-1].GetDispersionPlot(MultiFitPlot::SquaredDifference).Draw();
 		canvas->cd(i+nCentralities);
-		Rlcms[i-1].labels = ";m_{T} [GeV/c^{2}];R_{LCMS} std R_{LCMS}^{FIT}";
-		Rlcms[i-1].GetDispersionPlot(MultiFitPlot::Standarization).Draw();
+		Rlcms[i-1].labels = ";m_{T} [GeV/c^{2}];(R_{LCMS}-R_{LCMS}^{FIT})^{2}";
+		Rlcms[i-1].GetDispersionPlot(MultiFitPlot::SquaredDifference).Draw();
 	}
-	canvas->SaveAs("output/therminator_central_std.png");
+	canvas->SaveAs("output/therminator_central_sqdiff.png");
 	delete canvas;
 
 	// therminator peripheral
@@ -473,13 +474,13 @@ void createPrfPlots(MultiFitPlot *Rinv, MultiFitPlot *Rlcms, int nCentralities)
 	for(int i = 1; i <= nCentralities; ++i)
 	{
 		canvas->cd(i);
-		Rinv[i-1+4].labels = ";m_{T} [GeV/c^{2}];R_{inv} std R_{inv}^{FIT}";
-		Rinv[i-1+4].GetDispersionPlot(MultiFitPlot::Standarization).Draw();
+		Rinv[i-1+4].labels = ";m_{T} [GeV/c^{2}];(R_{inv}-R_{inv}^{FIT})^{2}";
+		Rinv[i-1+4].GetDispersionPlot(MultiFitPlot::SquaredDifference).Draw();
 		canvas->cd(i+nCentralities);
-		Rlcms[i-1+4].labels = ";m_{T} [GeV/c^{2}];R_{LCMS} std R_{LCMS}^{FIT}";
-		Rlcms[i-1+4].GetDispersionPlot(MultiFitPlot::Standarization).Draw();
+		Rlcms[i-1+4].labels = ";m_{T} [GeV/c^{2}];(R_{LCMS}-R_{LCMS}^{FIT})^{2}";
+		Rlcms[i-1+4].GetDispersionPlot(MultiFitPlot::SquaredDifference).Draw();
 	}
-	canvas->SaveAs("output/therminator_peripheral_std.png");
+	canvas->SaveAs("output/therminator_peripheral_sqdiff.png");
 	delete canvas;
 
 
