@@ -46,8 +46,8 @@ public:
 		Division,
 		// y - fittedFunction(x)
 		Difference,
-		// (y - fittedFunction(x) ) / fittedFunction(x)
-		Standarization
+		// (y - fittedFunction(x))^2
+		SquaredDifference
 	};
 
 	static TF1* defaultFunction;
@@ -186,10 +186,10 @@ private:
 				result.first = y/_fittingFunction->Eval(x);
 				result.second = yError/_fittingFunction->Eval(x);
 				break;
-			case Standarization :
-				result.first = (y - _fittingFunction->Eval(x))/_fittingFunction->Eval(x);
-				result.second = yError/_fittingFunction->Eval(x) - 1;
-				break;
+			case SquaredDifference :
+				result.first = (y - _fittingFunction->Eval(x))*(y - _fittingFunction->Eval(x));
+				result.second = 2.0*(y - _fittingFunction->Eval(x))*yError;
+				break;				
 		}
 		return result;
 	}
@@ -207,8 +207,8 @@ private:
 				yRange.first = 0.7;
 				yRange.second = 1.4;
 				break;
-			case Standarization :
-				yRange.first = -0.2;
+			case SquaredDifference :
+				yRange.first = -0.1;
 				yRange.second = 0.5;
 				break;
 		}
