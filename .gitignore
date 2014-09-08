@@ -5,4 +5,5 @@ Auto*
 *.d
 *.png
 *.root
+*.gz
 tpi_sh_b2/*
