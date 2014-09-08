@@ -28,8 +28,8 @@ void createPrfPlotAllInONe(MultiFitPlot Rinv[], MultiFitPlot Rlcms[], int nCentr
 void createPrfPlots(MultiFitPlot Rinv[], MultiFitPlot Rlcms[], int nCentralities);
 void fillGraph(std::string fileName, TGraphErrors *graph, unsigned int iParticle, bool isInvariant = kFALSE);
 
-// int plotter()
-int main()
+int plotter()
+// int main()
 {
 	gStyle->SetOptStat(0);
 	gStyle->SetLabelSize(0.06, "xyz");
@@ -241,6 +241,7 @@ void createLcmsPlot(std::string *graphNames, std::string *prefixes, const char *
 
 
 	canvas->SaveAs((std::string("output/")+fileName+std::string(".png")).c_str());
+	canvas->SaveAs((std::string("output/")+fileName+std::string(".root")).c_str());
 	delete canvas;
 	gStyle->SetPadGridX(true);
 	gStyle->SetPadGridY(true);

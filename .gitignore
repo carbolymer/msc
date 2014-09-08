@@ -6,3 +6,4 @@ Auto*
 *.png
 *.root
 tpi_sh_b2/*
+*.gz

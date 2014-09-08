@@ -1123,7 +1123,7 @@ void fitshanalyticreal( char *pref,
   gr22S->SetLineColor(kRed);
 
 
-  TCanvas *canfit = new TCanvas ("canfit","canfit",1200,300);
+  TCanvas *canfit = new TCanvas ("canfit","canfit",1800,450);
   canfit->SetFillColor(0);
   canfit->SetFillStyle(40000);
   canfit->Divide(3,1,0.0001,0.0001);
