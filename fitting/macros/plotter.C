@@ -20,6 +20,8 @@ const Double_t particleMasses[3] = { // in GeV / c^2
 	0.938272029 // proton
 };
 
+const bool isOutputAsRoot = true;
+
 const int numberOfCentralities = 8;
 
 void createLcmsPlot(std::string *graphNames, std::string *prefixes, const char *fileName,
@@ -28,8 +30,8 @@ void createPrfPlotAllInONe(MultiFitPlot Rinv[], MultiFitPlot Rlcms[], int nCentr
 void createPrfPlots(MultiFitPlot Rinv[], MultiFitPlot Rlcms[], int nCentralities);
 void fillGraph(std::string fileName, TGraphErrors *graph, unsigned int iParticle, bool isInvariant = kFALSE);
 
-// int plotter()
-int main()
+int plotter()
+// int main()
 {
 	gStyle->SetOptStat(0);
 	gStyle->SetLabelSize(0.06, "xyz");
@@ -240,7 +242,10 @@ void createLcmsPlot(std::string *graphNames, std::string *prefixes, const char *
 	Rlcms.Draw();
 
 
-	canvas->SaveAs((std::string("output/")+fileName+std::string(".png")).c_str());
+	if(isOutputAsRoot)
+		canvas->SaveAs((std::string("output/")+fileName+std::string(".root")).c_str());
+	else
+		canvas->SaveAs((std::string("output/")+fileName+std::string(".png")).c_str());
 	delete canvas;
 	gStyle->SetPadGridX(true);
 	gStyle->SetPadGridY(true);
@@ -264,7 +269,10 @@ void createLcmsPlot(std::string *graphNames, std::string *prefixes, const char *
 	Rlong.GetDispersionPlot(MultiFitPlot::Difference).Draw();
 	canvas->cd(4);
 	Rlcms.GetDispersionPlot(MultiFitPlot::Difference).Draw();
-	canvas->SaveAs((std::string("output/")+fileName+std::string("_diff.png")).c_str());
+	if(isOutputAsRoot)
+		canvas->SaveAs((std::string("output/")+fileName+std::string("_diff.root")).c_str());
+	else
+		canvas->SaveAs((std::string("output/")+fileName+std::string("_diff.png")).c_str());
 	delete canvas;
 
 	// * Division *
@@ -285,7 +293,10 @@ void createLcmsPlot(std::string *graphNames, std::string *prefixes, const char *
 	Rlong.GetDispersionPlot(MultiFitPlot::Division).Draw();
 	canvas->cd(4);
 	Rlcms.GetDispersionPlot(MultiFitPlot::Division).Draw();
-	canvas->SaveAs((std::string("output/")+fileName+std::string("_div.png")).c_str());
+	if(isOutputAsRoot)
+		canvas->SaveAs((std::string("output/")+fileName+std::string("_div.root")).c_str());
+	else
+		canvas->SaveAs((std::string("output/")+fileName+std::string("_div.png")).c_str());
 	delete canvas;
 
 
@@ -307,7 +318,10 @@ void createLcmsPlot(std::string *graphNames, std::string *prefixes, const char *
 	Rlong.GetDispersionPlot(MultiFitPlot::SquaredDifference).Draw();
 	canvas->cd(4);
 	Rlcms.GetDispersionPlot(MultiFitPlot::SquaredDifference).Draw();
-	canvas->SaveAs((std::string("output/")+fileName+std::string("_sqdiff.png")).c_str());
+	if(isOutputAsRoot)
+		canvas->SaveAs((std::string("output/")+fileName+std::string("_sqdiff.root")).c_str());
+	else
+		canvas->SaveAs((std::string("output/")+fileName+std::string("_sqdiff.png")).c_str());
 	delete canvas;
 
 
@@ -328,7 +342,10 @@ void createPrfPlotAllInONe(MultiFitPlot *Rinv, MultiFitPlot *Rlcms, int nCentral
 		canvas->cd(i+nCentralities);
 		Rlcms[i-1].Draw();
 	}
-	canvas->SaveAs("output/all.png");
+	if(isOutputAsRoot)
+		canvas->SaveAs("output/all.root");
+	else
+		canvas->SaveAs("output/all.png");
 	delete canvas;
 }
 
@@ -349,7 +366,10 @@ void createPrfPlots(MultiFitPlot *Rinv, MultiFitPlot *Rlcms, int nCentralities)
 		Rlcms[i-1].labels = ";m_{T} [GeV/c^{2}];R_{LCMS} [fm]";
 		Rlcms[i-1].Draw();
 	}
-	canvas->SaveAs("output/therminator_central.png");
+	if(isOutputAsRoot)
+		canvas->SaveAs("output/therminator_central.root");
+	else
+		canvas->SaveAs("output/therminator_central.png");
 	delete canvas;
 
 	// therminator peripheral
@@ -369,7 +389,10 @@ void createPrfPlots(MultiFitPlot *Rinv, MultiFitPlot *Rlcms, int nCentralities)
 		Rlcms[i-1+4].labels = ";m_{T} [GeV/c^{2}];R_{LCMS} [fm]";
 		Rlcms[i-1+4].Draw();
 	}
-	canvas->SaveAs("output/therminator_peripheral.png");
+	if(isOutputAsRoot)
+		canvas->SaveAs("output/therminator_peripheral.root");
+	else
+		canvas->SaveAs("output/therminator_peripheral.png");
 
 	delete canvas;
 
@@ -395,7 +418,10 @@ void createPrfPlots(MultiFitPlot *Rinv, MultiFitPlot *Rlcms, int nCentralities)
 		Rlcms[i-1].labels = ";m_{T} [GeV/c^{2}];R_{LCMS} - R_{LCMS}^{FIT}";
 		Rlcms[i-1].GetDispersionPlot(MultiFitPlot::Difference).Draw();
 	}
-	canvas->SaveAs("output/therminator_central_diff.png");
+	if(isOutputAsRoot)
+		canvas->SaveAs("output/therminator_central_diff.root");
+	else
+		canvas->SaveAs("output/therminator_central_diff.png");
 	delete canvas;
 
 	// therminator peripheral
@@ -411,7 +437,10 @@ void createPrfPlots(MultiFitPlot *Rinv, MultiFitPlot *Rlcms, int nCentralities)
 		Rlcms[i-1+4].labels = ";m_{T} [GeV/c^{2}];R_{LCMS}-R_{LCMS}^{FIT}";
 		Rlcms[i-1+4].GetDispersionPlot(MultiFitPlot::Difference).Draw();
 	}
-	canvas->SaveAs("output/therminator_peripheral_diff.png");
+	if(isOutputAsRoot)
+		canvas->SaveAs("output/therminator_peripheral_diff.root");
+	else
+		canvas->SaveAs("output/therminator_peripheral_diff.png");
 	delete canvas;
 
 	// *** Division ***
@@ -429,7 +458,10 @@ void createPrfPlots(MultiFitPlot *Rinv, MultiFitPlot *Rlcms, int nCentralities)
 		Rlcms[i-1].labels = ";m_{T} [GeV/c^{2}];R_{LCMS} / R_{LCMS}^{FIT}";
 		Rlcms[i-1].GetDispersionPlot(MultiFitPlot::Division).Draw();
 	}
-	canvas->SaveAs("output/therminator_central_div.png");
+	if(isOutputAsRoot)
+		canvas->SaveAs("output/therminator_central_div.root");
+	else
+		canvas->SaveAs("output/therminator_central_div.png");
 	delete canvas;
 
 	// therminator peripheral
@@ -445,7 +477,10 @@ void createPrfPlots(MultiFitPlot *Rinv, MultiFitPlot *Rlcms, int nCentralities)
 		Rlcms[i-1+4].labels = ";m_{T} [GeV/c^{2}];R_{LCMS} / R_{LCMS}^{FIT}";
 		Rlcms[i-1+4].GetDispersionPlot(MultiFitPlot::Division).Draw();
 	}
-	canvas->SaveAs("output/therminator_peripheral_div.png");
+	if(isOutputAsRoot)
+		canvas->SaveAs("output/therminator_peripheral_div.root");
+	else
+		canvas->SaveAs("output/therminator_peripheral_div.png");
 	delete canvas;
 
 
@@ -464,7 +499,10 @@ void createPrfPlots(MultiFitPlot *Rinv, MultiFitPlot *Rlcms, int nCentralities)
 		Rlcms[i-1].labels = ";m_{T} [GeV/c^{2}];(R_{LCMS}-R_{LCMS}^{FIT})^{2}";
 		Rlcms[i-1].GetDispersionPlot(MultiFitPlot::SquaredDifference).Draw();
 	}
-	canvas->SaveAs("output/therminator_central_sqdiff.png");
+	if(isOutputAsRoot)
+		canvas->SaveAs("output/therminator_central_sqdiff.root");
+	else
+		canvas->SaveAs("output/therminator_central_sqdiff.png");
 	delete canvas;
 
 	// therminator peripheral
@@ -480,7 +518,10 @@ void createPrfPlots(MultiFitPlot *Rinv, MultiFitPlot *Rlcms, int nCentralities)
 		Rlcms[i-1+4].labels = ";m_{T} [GeV/c^{2}];(R_{LCMS}-R_{LCMS}^{FIT})^{2}";
 		Rlcms[i-1+4].GetDispersionPlot(MultiFitPlot::SquaredDifference).Draw();
 	}
-	canvas->SaveAs("output/therminator_peripheral_sqdiff.png");
+	if(isOutputAsRoot)
+		canvas->SaveAs("output/therminator_peripheral_sqdiff.root");
+	else
+		canvas->SaveAs("output/therminator_peripheral_sqdiff.png");
 	delete canvas;
 
 
