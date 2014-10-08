@@ -1199,6 +1199,7 @@ void fitshanalyticreal( char *pref,
 
   // canfit->SaveAs("canfit.root");
   canfit->SaveAs(plotShName.c_str());
+  canfit->SaveAs((plotShName + string(".root")).c_str());
 
   // TFile *ofit = new TFile("ofit.root","RECREATE");
   // ofit->cd();

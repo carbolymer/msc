@@ -109,6 +109,7 @@ bool fit1dcould(const char *fileName, Double_t &Rinv, Double_t &RinvE)
   ratq->Draw();
   funq->Draw("SAMEP");
   canfit->SaveAs(plot1dName.c_str());
+  canfit->SaveAs((plot1dName + string(".root")).c_str());
 
   return kTRUE;
 }
