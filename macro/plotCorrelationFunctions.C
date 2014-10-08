@@ -12,7 +12,7 @@
 
 #define LABELTEST false
 const int rebinFactor = 2;
-const int pairTypesNumber = 8;
+const int pairTypesNumber = 3;
 const int colorTable[] = {1,2,4,6,8,9,12,46};
 
 typedef struct
@@ -53,12 +53,12 @@ void loadCentralityBin(
 		const char *centrality,
 		std::vector<CorrelationFunction> &pipi,
 		std::vector<CorrelationFunction> &pp,
-		std::vector<CorrelationFunction> &kk,
-		std::vector<CorrelationFunction> &kp,
-		std::vector<CorrelationFunction> &pik,
-		std::vector<CorrelationFunction> &piku,
-		std::vector<CorrelationFunction> &pip,
-		std::vector<CorrelationFunction> &pipu
+		std::vector<CorrelationFunction> &kk
+		// std::vector<CorrelationFunction> &kp
+		// std::vector<CorrelationFunction> &pik,
+		// std::vector<CorrelationFunction> &piku,
+		// std::vector<CorrelationFunction> &pip,
+		// std::vector<CorrelationFunction> &pipu
 	);
 
 void Draw(const char* pairName, const char* canvasName, std::vector<CorrelationFunction> &plots, bool isIdentical = true);
@@ -71,60 +71,60 @@ int plotCorrelationFunctions()
 	std::vector<CorrelationFunction> 
 		pipi,
 		pp,
-		kk,
-		kp,
+		kk;
+		/*kp,
 		pik,
 		piku,
 		pip,
-		pipu;
+		pipu;*/
 
 	loadCentralityBin(
-		"/mnt/data2/Models/tpi_output/lhyquid3vb2",
+		"/mnt/bulk/lhyquid3vb2",
 		"lhyquid3v",
 		"b = 2.3 fm",
-		pipi, pp, kk, kp, pik, piku, pip, pipu);
-
-	// loadCentralityBin(
-	// 	"/mnt/data2/Models/tpi_output/lhyquid3vb3",
-	// 	"lhyquid3v",
-	// 	"b = 3.1 fm",
-	// 	pipi, pp, kk, kp, pik, piku, pip, pipu);
+		pipi, pp, kk/*, kp, pik, piku, pip, pipu*/);
 
 	loadCentralityBin(
-		"/mnt/data2/Models/tpi_output/lhyquid3vb5.7",
+		"/mnt/bulk/lhyquid3vb3",
+		"lhyquid3v",
+		"b = 3.1 fm",
+		pipi, pp, kk/*, kp, pik, piku, pip, pipu*/);
+
+	loadCentralityBin(
+		"/mnt/bulk/lhyquid3vb5.7",
 		"lhyquid3v",
 		"b = 5.7 fm",
-		pipi, pp, kk, kp, pik, piku, pip, pipu);
+		pipi, pp, kk/*, kp, pik, piku, pip, pipu*/);
 
 	loadCentralityBin(
-		"/mnt/data2/Models/tpi_output/lhyquid3vb7.4",
+		"/mnt/bulk/lhyquid3vb7.4",
 		"lhyquid3v",
 		"b = 7.4 fm",
-		pipi, pp, kk, kp, pik, piku, pip, pipu);
-
-	// loadCentralityBin(
-	// 	"/mnt/data2/Models/tpi_output/lhyquid3vb8.7",
-	// 	"lhyquid3v",
-	// 	"b = 8.7 fm",
-	// 	pipi, pp, kk, kp, pik, piku, pip, pipu);
-
-	// loadCentralityBin(
-	// 	"/mnt/data2/Models/tpi_output/lhyquid3vb9.9",
-	// 	"lhyquid3v",
-	// 	"b = 9.9 fm",
-	// 	pipi, pp, kk, kp, pik, piku, pip, pipu);
+		pipi, pp, kk/*, kp, pik, piku, pip, pipu*/);
 
 	loadCentralityBin(
-		"/mnt/data2/Models/tpi_output/lhyquid3vb10.9",
+		"/mnt/bulk/lhyquid3vb8.7",
+		"lhyquid3v",
+		"b = 8.7 fm",
+		pipi, pp, kk/*, kp, pik, piku, pip, pipu*/);
+
+	loadCentralityBin(
+		"/mnt/bulk/lhyquid3vb9.9",
+		"lhyquid3v",
+		"b = 9.9 fm",
+		pipi, pp, kk/*, kp, pik, piku, pip, pipu*/);
+
+	loadCentralityBin(
+		"/mnt/bulk/lhyquid3vb10.9",
 		"lhyquid3v",
 		"b = 10.9 fm",
-		pipi, pp, kk, kp, pik, piku, pip, pipu);
+		pipi, pp, kk/*, kp, pik, piku, pip, pipu*/);
 
 	loadCentralityBin(
-		"/mnt/data2/Models/tpi_output/lhyquid3vb11.9",
+		"/mnt/bulk/lhyquid3vb11.9",
 		"lhyquid3v",
 		"b = 11.9 fm",
-		pipi, pp, kk, kp, pik, piku, pip, pipu);
+		pipi, pp, kk/*, kp, pik, piku, pip, pipu*/);
 
 	gStyle->SetOptStat(0);
 	gStyle->SetLabelSize(labelSize, "xyz");
@@ -137,11 +137,11 @@ int plotCorrelationFunctions()
 	Draw("#pi-#pi","pipi",pipi);
 	Draw("K-K","kk",kk);
 	Draw("p-p","pp",pp);
-	Draw("K-p","kp",kp, false);
-	Draw("#pi-K like sign","pik",pik, false);
-	Draw("#pi-K unlike sign","piku",piku, false);
-	Draw("#pi-p like sign","pip",pip, false);
-	Draw("#pi-p unlike sign","pipu",pipu, false);
+	// Draw("K-p","kp",kp, false);
+	// Draw("#pi-K like sign","pik",pik, false);
+	// Draw("#pi-K unlike sign","piku",piku, false);
+	// Draw("#pi-p like sign","pip",pip, false);
+	// Draw("#pi-p unlike sign","pipu",pipu, false);
 
 	return 0;
 }
@@ -152,12 +152,12 @@ void loadCentralityBin(
 		const char *centrality,
 		std::vector<CorrelationFunction> &pipi,
 		std::vector<CorrelationFunction> &pp,
-		std::vector<CorrelationFunction> &kk,
-		std::vector<CorrelationFunction> &kp,
-		std::vector<CorrelationFunction> &pik,
-		std::vector<CorrelationFunction> &piku,
-		std::vector<CorrelationFunction> &pip,
-		std::vector<CorrelationFunction> &pipu
+		std::vector<CorrelationFunction> &kk
+		// std::vector<CorrelationFunction> &kp,
+		// std::vector<CorrelationFunction> &pik,
+		// std::vector<CorrelationFunction> &piku,
+		// std::vector<CorrelationFunction> &pip,
+		// std::vector<CorrelationFunction> &pipu
 	)
 {
 	CorrelationFunction cf;
@@ -168,11 +168,11 @@ void loadCentralityBin(
 		*chPipi,
 		*chPp,
 		*chKk,
-		*chKp,
-		*chPik,
-		*chPiku,
-		*chPip,
-		*chPipu,
+		// *chKp,
+		// *chPik,
+		// *chPiku,
+		// *chPip,
+		// *chPipu,
 		*chains[pairTypesNumber];
 	std::string sDirectory = directory;
 	cf.model = model;
@@ -184,20 +184,20 @@ void loadCentralityBin(
 	chPipi = chains[0];
 	chPp = chains[1];
 	chKk = chains[2];
-	chKp = chains[3];
-	chPik = chains[4];
-	chPiku = chains[5];
-	chPip = chains[6];
-	chPipu = chains[7];
+	// chKp = chains[3];
+	// chPik = chains[4];
+	// chPiku = chains[5];
+	// chPip = chains[6];
+	// chPipu = chains[7];
 
 	correlationFunctions[0] = &pipi;
 	correlationFunctions[1] = &pp;
 	correlationFunctions[2] = &kk;
-	correlationFunctions[3] = &kp;
-	correlationFunctions[4] = &pik;
-	correlationFunctions[5] = &piku;
-	correlationFunctions[6] = &pip;
-	correlationFunctions[7] = &pipu;
+	// correlationFunctions[3] = &kp;
+	// correlationFunctions[4] = &pik;
+	// correlationFunctions[5] = &piku;
+	// correlationFunctions[6] = &pip;
+	// correlationFunctions[7] = &pipu;
 
 	if(LABELTEST)
 	{
@@ -218,21 +218,21 @@ void loadCentralityBin(
 	chPipi->Add( (sDirectory+std::string("/outfilecf53a.root")).c_str() );
 	chPp->Add( (sDirectory+std::string("/outfileppcf58a.root")).c_str() );
 	chKk->Add( (sDirectory+std::string("/outfilekkcf54a.root")).c_str() );
-	chKp->Add( (sDirectory+std::string("/outfilekpcf*.root")).c_str() );
-	chPik->Add( (sDirectory+std::string("/outfilepikcf*.root")).c_str() );
-	chPiku->Add( (sDirectory+std::string("/outfilepikulcf*.root")).c_str() );
-	chPip->Add( (sDirectory+std::string("/outfilepipcf*.root")).c_str() );
-	chPipu->Add( (sDirectory+std::string("/outfilepipulcf*.root")).c_str() );
+	// chKp->Add( (sDirectory+std::string("/outfilekpcf*.root")).c_str() );
+	// chPik->Add( (sDirectory+std::string("/outfilepikcf*.root")).c_str() );
+	// chPiku->Add( (sDirectory+std::string("/outfilepikulcf*.root")).c_str() );
+	// chPip->Add( (sDirectory+std::string("/outfilepipcf*.root")).c_str() );
+	// chPipu->Add( (sDirectory+std::string("/outfilepipulcf*.root")).c_str() );
 
 	for(int i =0; i < pairTypesNumber ; ++i)
 	{
 		TObjArray *fileElements = chains[i]->GetListOfFiles();
-        TIter next(fileElements);
-        TChainElement *chEl=0;
+    TIter next(fileElements);
+    TChainElement *chEl=0;
 		TFileMerger merger(kFALSE,kFALSE);
 		merger.SetMsgPrefix("[merger]");
 		merger.SetNotrees(kFALSE);
-        while( (chEl = (TChainElement*)next()) )
+    while( (chEl = (TChainElement*)next()) )
 		{
 			if(!merger.AddFile(chEl->GetTitle()))
 				std::cerr << "Could not add file: " << chEl->GetTitle() << std::endl;

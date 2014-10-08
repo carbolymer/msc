@@ -35,18 +35,18 @@ IFS_BAK=$IFS
 IFS="
 "
 
-# Kaons
-# find $EVENT_DIR -name "outfilekkcf*" -type f | sort | ./ktDecoder 1> data/$CENTRALITY/filelist.kk.in
-# FILES=`cat data/$CENTRALITY/filelist.kk.in`
-# for parameter in $FILES
-# do
-# 	IFS=$IFS_BAK
-# 	PARAMETERS_ARR=( $parameter );
-# 	./fitsh $parameter data/$CENTRALITY/kk &>> log/fitsh.$CENTRALITY.kk.${PARAMETERS_ARR[1]}.log &
-# 	./fit1d $parameter data/$CENTRALITY/kk &>> log/fit1d.$CENTRALITY.kk.${PARAMETERS_ARR[1]}.log &
-# 	IFS="
-# "
-# done
+# # Kaons
+#  find $EVENT_DIR -name "outfilekkcf*" -type f | sort | ./ktDecoder 1> data/$CENTRALITY/filelist.kk.in
+#  FILES=`cat data/$CENTRALITY/filelist.kk.in`
+#  for parameter in $FILES
+#  do
+#  	IFS=$IFS_BAK
+#  	PARAMETERS_ARR=( $parameter );
+#  	./fitsh $parameter data/$CENTRALITY/kk &>> log/fitsh.$CENTRALITY.kk.${PARAMETERS_ARR[1]}.log &
+#  	./fit1d $parameter data/$CENTRALITY/kk &>> log/fit1d.$CENTRALITY.kk.${PARAMETERS_ARR[1]}.log &
+#  	IFS="
+#  "
+#  done
 
 # Pions
 find $EVENT_DIR -name "outfilecf*" -type f | sort | ./ktDecoder 1> data/$CENTRALITY/filelist.pipi.in

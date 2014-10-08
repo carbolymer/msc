@@ -20,7 +20,7 @@ const Double_t particleMasses[3] = { // in GeV / c^2
 	0.938272029 // proton
 };
 
-const bool isOutputAsRoot = true;
+const bool isOutputAsRoot = false;
 
 const int numberOfCentralities = 8;
 
