@@ -18,7 +18,7 @@ typedef unsigned short int ushort;
 const string rootPathForCFs = "../../../tpi_output/";
 
 const float latexTextSizeSmall = 0.04;
-const float latexTextSizeBig = 0.08;
+const float latexTextSizeBig = 0.06;
 
 const int colors[9] = { kRed, kBlue, kOrange-1, kGreen+2, kViolet+1, kRed+3, kCyan+1, kCyan+2, kOrange-3 };
 const int markers[9] = { 21, 24, 33, 25, 20, 27, 34, 30, 34 };
@@ -30,14 +30,20 @@ typedef struct
   TGraph* c22;
 } CF3D;
 
-void preparePad()
+void preparePad(bool isUpper = true)
 {
   gPad->SetFillColor(0);
   gPad->SetFillStyle(4000);
-  gPad->SetTopMargin(0.05);
-  gPad->SetRightMargin(0.005);
-  gPad->SetBottomMargin(0.13);
-  gPad->SetLeftMargin(0.17);
+  if(isUpper)
+  {
+    gPad->SetTopMargin(0.016);
+    gPad->SetBottomMargin(0.17);
+  } else {
+    gPad->SetTopMargin(0.019);
+    gPad->SetBottomMargin(0.13);
+  }
+  gPad->SetRightMargin(0.04);
+  gPad->SetLeftMargin(0.18);
   gPad->SetTickx(1);
   gPad->SetTicky(1);
   gStyle->SetOptStat(1000000000);
@@ -57,7 +63,7 @@ void changeHistogramStyle(TGraph *histogram,  ushort ht, ushort ct) {
   histogram->GetXaxis()->CenterTitle();
   histogram->GetYaxis()->CenterTitle();
   histogram->GetXaxis()->SetTitleOffset(1.2);
-  histogram->GetYaxis()->SetTitleOffset(1.7);
+  histogram->GetYaxis()->SetTitleOffset(1.8);
   histogram->SetLineWidth(2);
 }
 
@@ -73,8 +79,14 @@ CF3D extractCorrelationFuncton(string fileName) {
 
 
 void drawPions() {
-  TCanvas *canvas = new TCanvas("sphpi","sphpi",1000, 500);
-  canvas->Divide(3,1);
+  TCanvas *canvas = new TCanvas("sphpi","sphpi",800, 800);
+  TPad 
+    *pad1 = new TPad("pipipad1","foo",0.0,0.5,0.5,1.0),
+    *pad2 = new TPad("pipipad2","foo",0.5,0.5,1,1),
+    *pad3 = new TPad("pipipad3","foo",0.25,0.0,0.75,0.5);
+  pad1->Draw();
+  pad2->Draw();
+  pad3->Draw();
 
   vector<CF3D> cf;
   cf.push_back(extractCorrelationFuncton("lhyquid3vb3/outfilecf52a.root"));
@@ -96,10 +108,10 @@ void drawPions() {
 
   TLatex latex;
   latex.SetTextSize(latexTextSizeSmall);
-  TLegend *legend = new TLegend(0.7,0.6, 0.9,0.9);
+  TLegend *legend = new TLegend(0.7,0.55, 0.9,0.85);
   for(ushort i = 0; i < cf.size(); ++i) {
     /* c00 */
-    canvas->cd(1);
+    pad1->cd();
     preparePad();
     changeHistogramStyle(cf[i].c00,i,0);
     cf[i].c00->GetXaxis()->SetLimits(0,0.15);
@@ -113,7 +125,7 @@ void drawPions() {
     legend->AddEntry(cf[i].c00, labels[i].c_str(),"l");
 
     /* c20 */
-    canvas->cd(2);
+    pad2->cd();
     preparePad();
     changeHistogramStyle(cf[i].c20,i,0);
     cf[i].c20->GetXaxis()->SetLimits(0,0.14);
@@ -126,8 +138,8 @@ void drawPions() {
     }
 
     /* c22 */
-    canvas->cd(3);
-    preparePad();
+    pad3->cd();
+    preparePad(false);
     changeHistogramStyle(cf[i].c22,i,0);
     cf[i].c22->GetXaxis()->SetLimits(0,0.14);
     cf[i].c22->GetYaxis()->SetRangeUser(-0.03,0.005);
@@ -138,20 +150,26 @@ void drawPions() {
       cf[i].c22->Draw("SAME");
     }
   }
-  canvas->cd(1);
+  pad1->cd();
   legend->SetBorderSize(0);
   legend->SetFillColor(0);
   legend->SetTextSize(latexTextSizeSmall);
   legend->Draw();
-  canvas->cd(2);
+  pad1->cd();
   latex.SetTextSize(latexTextSizeBig);
-  latex.DrawLatex(0.06,0.002,"#pi-#pi");
+  latex.DrawLatex(0.105,1.85,"#pi-#pi");
   canvas->SaveAs("cf3dpi.eps");
 }
 
 void drawKaons() {
-  TCanvas *canvas = new TCanvas("sphk","sphk",1000, 500);
-  canvas->Divide(3,1);
+  TCanvas *canvas = new TCanvas("sphk","sphk",800, 800);
+  TPad 
+    *pad1 = new TPad("kkpad1","foo",0.0,0.5,0.5,1.0),
+    *pad2 = new TPad("kkpad2","foo",0.5,0.5,1,1),
+    *pad3 = new TPad("kkpad3","foo",0.25,0.0,0.75,0.5);
+  pad1->Draw();
+  pad2->Draw();
+  pad3->Draw();
 
   vector<CF3D> cf;
   cf.push_back(extractCorrelationFuncton("lhyquid3vb3/outfilekkcf53a.root"));
@@ -173,10 +191,10 @@ void drawKaons() {
 
   TLatex latex;
   latex.SetTextSize(latexTextSizeSmall);
-  TLegend *legend = new TLegend(0.7,0.6, 0.9,0.9);
+  TLegend *legend = new TLegend(0.7,0.55, 0.9,0.85);
   for(ushort i = 0; i < cf.size(); ++i) {
     /* c00 */
-    canvas->cd(1);
+    pad1->cd();
     preparePad();
     changeHistogramStyle(cf[i].c00,i,0);
     cf[i].c00->GetXaxis()->SetLimits(0,0.15);
@@ -190,8 +208,8 @@ void drawKaons() {
     legend->AddEntry(cf[i].c00, labels[i].c_str(),"l");
 
     /* c20 */
-    canvas->cd(2);
-    preparePad();
+    pad2->cd();
+    preparePad(false);
     changeHistogramStyle(cf[i].c20,i,0);
     cf[i].c20->GetXaxis()->SetLimits(0,0.2);
     cf[i].c20->GetYaxis()->SetRangeUser(-0.08,0.01);    
@@ -203,7 +221,7 @@ void drawKaons() {
     }
 
     /* c22 */
-    canvas->cd(3);
+    pad3->cd();
     preparePad();
     changeHistogramStyle(cf[i].c22,i,0);
     cf[i].c22->GetXaxis()->SetLimits(0,0.2);
@@ -215,21 +233,27 @@ void drawKaons() {
       cf[i].c22->Draw("SAME");
     }
   }
-  canvas->cd(1);
+  pad1->cd();
   legend->SetBorderSize(0);
   legend->SetFillColor(0);
   legend->SetTextSize(latexTextSizeSmall);
   legend->Draw();
-  canvas->cd(2);
+  pad1->cd();
   latex.SetTextSize(latexTextSizeBig);
-  latex.DrawLatex(0.06,0.011,"K-K");
+  latex.DrawLatex(0.105,1.85,"K-K");
   canvas->SaveAs("cf3dk.eps");
 }
 
 
 void drawProtons() {
-  TCanvas *canvas = new TCanvas("sphk","sphk",1000, 500);
-  canvas->Divide(3,1);
+  TCanvas *canvas = new TCanvas("sphp","sphp",800, 800);
+  TPad 
+    *pad1 = new TPad("pppad1","foo",0.0,0.5,0.5,1.0),
+    *pad2 = new TPad("pppad2","foo",0.5,0.5,1,1),
+    *pad3 = new TPad("pppad3","foo",0.25,0.0,0.75,0.5);
+  pad1->Draw();
+  pad2->Draw();
+  pad3->Draw();
 
   vector<CF3D> cf;
   cf.push_back(extractCorrelationFuncton("lhyquid3vb3/outfileppcf55a.root"));
@@ -254,7 +278,7 @@ void drawProtons() {
   TLegend *legend = new TLegend(0.7,0.2, 0.9,0.5);
   for(ushort i = 0; i < cf.size(); ++i) {
     /* c00 */
-    canvas->cd(1);
+    pad1->cd();
     preparePad();
     changeHistogramStyle(cf[i].c00,i,0);
     cf[i].c00->GetXaxis()->SetLimits(0,0.15);
@@ -268,7 +292,7 @@ void drawProtons() {
     legend->AddEntry(cf[i].c00, labels[i].c_str(),"l");
 
     /* c20 */
-    canvas->cd(2);
+    pad2->cd();
     preparePad();
     changeHistogramStyle(cf[i].c20,i,0);
     cf[i].c20->GetXaxis()->SetLimits(0,0.15);
@@ -281,8 +305,8 @@ void drawProtons() {
     }
 
     /* c22 */
-    canvas->cd(3);
-    preparePad();
+    pad3->cd();
+    preparePad(false);
     changeHistogramStyle(cf[i].c22,i,0);
     cf[i].c22->GetXaxis()->SetLimits(0,0.15);
     cf[i].c22->GetYaxis()->SetRangeUser(-0.06,0.06);
@@ -293,21 +317,21 @@ void drawProtons() {
       cf[i].c22->Draw("SAME");
     }
   }
-  canvas->cd(1);
+  pad1->cd();
   legend->SetBorderSize(0);
   legend->SetFillColor(0);
   legend->SetTextSize(latexTextSizeSmall);
   legend->Draw();
-  canvas->cd(2);
+  pad1->cd();
   latex.SetTextSize(latexTextSizeBig);
-  latex.DrawLatex(0.06,0.083,"p-p");
+  latex.DrawLatex(0.105,0.45,"p-p");
   canvas->SaveAs("cf3dp.eps");
 }
 
 void plotSphericalHarmonics() {
 
-  // drawPions();
-  // drawKaons();
+  drawPions();
+  drawKaons();
   drawProtons();
 }
 

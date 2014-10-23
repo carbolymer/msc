@@ -2,24 +2,31 @@
 #include <string>
 #include <vector>
 #include <TH1D.h>
+#include <TPad.h>
 
 typedef unsigned short int ushort;
 
 const string rootPathForCFs = "../../../tpi_output/";
 
 const float latexTextSizeSmall = 0.04;
-const float latexTextSizeBig = 0.06;
+const float latexTextSizeBig = 0.045;
 
 const int colors[9] = { kRed, kBlue, kOrange-1, kGreen+2, kViolet+1, kRed+3, kCyan+1, kCyan+2, kOrange-3 };
 const int markers[9] = { 21, 24, 33, 25, 20, 27, 34, 30, 34 };
 
-void preparePad()
+void preparePad(bool isUpper = true)
 {
   gPad->SetFillColor(0);
   gPad->SetFillStyle(4000);
-  gPad->SetTopMargin(0.013);
-  gPad->SetRightMargin(0.005);
-  gPad->SetBottomMargin(0.13);
+  if(isUpper)
+  {
+    gPad->SetTopMargin(0.016);
+    gPad->SetBottomMargin(0.17);
+  } else {
+    gPad->SetTopMargin(0.019);
+    gPad->SetBottomMargin(0.13);
+  }
+  gPad->SetRightMargin(0.02);
   gPad->SetLeftMargin(0.15);
   gPad->SetTickx(1);
   gPad->SetTicky(1);
@@ -90,7 +97,7 @@ pipiVskt() {
       latex.Draw();
     // label
     float xpos = 0.088;
-    float ypos = 1.17-i*0.012;
+    float ypos = 1.15-i*0.012;
     m1 = new TMarker(xpos, ypos, markers[i]);
     m1->SetMarkerSize(1.2);
     m1->SetMarkerColor(colors[i]);
@@ -149,7 +156,7 @@ kkVskt() {
 }
 
 ppVskt() {
-  preparePad();
+  preparePad(false);
 
   vector<TH1D*> cf;
   // cf.push_back(extractCorrelationFuncton("lhyquid3vb11.9/outfileppcf54a.root"));
@@ -292,7 +299,7 @@ kkVsctr() {
 }
 
 ppVsctr() {
-  preparePad();
+  preparePad(false);
 
   vector<TH1D*> cf;
   // cf.push_back(extractCorrelationFuncton("lhyquid3vb2/outfileppcf55a.root"));
@@ -346,31 +353,45 @@ ppVsctr() {
 
 
 void ktDependence() {
-  TCanvas *canvas = new TCanvas("vskt","vskt",1000, 400);
-  canvas->Divide(3,1);
-  canvas->cd(1);
+  TCanvas *canvas = new TCanvas("vskt","vskt",800, 800);
+  TPad 
+    *pad1 = new TPad("ktpad1","foo",0.0,0.5,0.5,1.0),
+    *pad2 = new TPad("ktpad2","foo",0.5,0.5,1,1),
+    *pad3 = new TPad("ktpad3","foo",0.25,0.0,0.75,0.5);
+  pad1->Draw();
+  pad2->Draw();
+  pad3->Draw();
+  pad1->cd();
   pipiVskt();
-  canvas->cd(2);
+  // canvas->cd(2);
+  pad2->cd();
   kkVskt();
-  canvas->cd(3);
+  // canvas->cd(3);
+  pad3->cd();
   ppVskt();
   canvas->SaveAs("cfvskt.eps");
 }
 
 centralityDependence() {
-  TCanvas *canvas = new TCanvas("vsctr","vsctr",1000, 400);
-  canvas->Divide(3,1);
-  canvas->cd(1);
+  TCanvas *canvas = new TCanvas("vsctr","vsctr",800, 800);
+  TPad 
+    *pad1 = new TPad("ctrpad1","foo",0.0,0.5,0.5,1.0),
+    *pad2 = new TPad("ctrpad2","foo",0.5,0.5,1,1),
+    *pad3 = new TPad("ctrpad3","foo",0.25,0.0,0.75,0.5);
+  pad1->Draw();
+  pad2->Draw();
+  pad3->Draw();
+  pad1->cd();
   pipiVsctr();
-  canvas->cd(2);
+  pad2->cd();
   kkVsctr();
-  canvas->cd(3);
+  pad3->cd();
   ppVsctr();
   canvas->SaveAs("cfvsctr.eps");
 }
 
 int cf1DAllCentralities() {
-  // ktDependence();
+  ktDependence();
   centralityDependence();
   return 0;
 }
